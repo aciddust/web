@@ -1,0 +1,9 @@
+# FE
+node_modules
+.svelte-kit
+
+# BE
+__pycache__/
+*.py[cod]
+*$py.class
+*.log

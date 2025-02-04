@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "t00lk1t"
+version = "0.1.0"
+description = "modules for T00LK1T web"
+authors = ["d3fau1t <aciddust20@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12.7"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.0"
+commitizen = "^4.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_third_party = ["markdown_table_string"]

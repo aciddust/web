@@ -1,0 +1,9 @@
+export const DEFAULT_ROUTE = "";
+export const ISSUE_URL = "https://github.com/T00LK1T/web/issues/new";
+export const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.27.2/full/";
+export const PYODIDE_ROUTES = {
+  "markdown-table-string": {
+    module: "func",
+    clientFilePath: "client.py",
+  }
+}
