@@ -54,9 +54,7 @@
     if (!pyodide) {
       return
     }
-    // console.debug("client code", code)
     let newCode = `${code}\nfunc(module, """${inputData}""")`
-    // console.debug("new code", newCode)
     await runPython(pyodide, newCode).then((result) => {
       markdownTableOutput = result
     }).catch((error) => {

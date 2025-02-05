@@ -460,6 +460,21 @@ files = [
 prompt_toolkit = ">=2.0,<4.0"
 
 [[package]]
+name = "sqlparse"
+version = "0.5.3"
+description = "A non-validating SQL parser."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "sqlparse-0.5.3-py3-none-any.whl", hash = "sha256:cf2196ed3418f3ba5de6af7e82c694a9fbdbfecccdfc72e281548517081f16ca"},
+    {file = "sqlparse-0.5.3.tar.gz", hash = "sha256:09f67787f56a0b16ecdbde1bfc7f5d9c3371ca683cfeaa8e6ff60b4807ec9272"},
+]
+
+[package.extras]
+dev = ["build", "hatch"]
+doc = ["sphinx"]
+
+[[package]]
 name = "termcolor"
 version = "2.5.0"
 description = "ANSI color formatting for output in terminal"
@@ -498,4 +513,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12.7"
-content-hash = "2d7d9054036880da2c39ec595c6f74cd083c7853a4dcb5f30efa4b22b784623a"
+content-hash = "9fe4d0ba8f1675cb094d88b46e2de9f7d2436b10ab20179c2da146809bf50edb"

@@ -5,5 +5,9 @@ export const PYODIDE_ROUTES = {
   "markdown-table-string": {
     module: "func",
     clientFilePath: "client.py",
+  },
+  "query-beautifier": {
+    module: "func",
+    clientFilePath: "client.py",
   }
 }

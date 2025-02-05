@@ -37,7 +37,18 @@
 				ASMR
 			</Menubar.Item>
       <Menubar.Separator />
-      <Menubar.Item>
+      <Menubar.Item on:click={async () => {
+				// press esc key to close the menu
+				new KeyboardEvent('keydown', {
+					key: 'Escape',
+					code: 'Escape',
+					keyCode: 27,
+					which: 27,
+					bubbles: true,
+				});
+				await new Promise((resolve) => setTimeout(resolve, 200));
+				window.print()
+			}}>
 				Print
 				<Menubar.Shortcut>⌘P</Menubar.Shortcut>
 			</Menubar.Item>
