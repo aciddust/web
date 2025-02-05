@@ -45,10 +45,10 @@ export const loadExternalFileAsBytes = async (fileUrl: string) => {
   return base64;
 }
 
-export async function runPython(pyodide: any, code: string, ...args: any) {
+export async function runPython(pyodide: any, code: string) {
   if (!pyodide) return;
   try {
-      return await pyodide.runPythonAsync(code, ...args);
+      return await pyodide.runPythonAsync(code);
   } catch (error) {
       console.error("Python 코드 실행 실패:", error);
   }

@@ -7,6 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12.7"
+numpy = "^1.26.4"
+pillow = "^11.1.0"
+wordcloud = "^1.9.4"
 
 
 [tool.poetry.group.dev.dependencies]

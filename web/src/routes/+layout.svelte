@@ -24,7 +24,7 @@
       <Menubar.Item on:click={() => routeToPage('query-beautifier')}>
 				Query Beautifier
 			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('word-cloud-generator')}>
+			<Menubar.Item on:click={() => routeToPage('wordcloud-generator')}>
 				WordCloud Generator
 			</Menubar.Item>
 			<Menubar.Item on:click={() => routeToPage('diff-checker')}>

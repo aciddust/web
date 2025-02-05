@@ -9,5 +9,9 @@ export const PYODIDE_ROUTES = {
   "query-beautifier": {
     module: "func",
     clientFilePath: "client.py",
+  },
+  "wordcloud-generator": {
+    module: "func",
+    clientFilePath: "client.py",
   }
 }
