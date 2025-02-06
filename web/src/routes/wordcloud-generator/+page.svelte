@@ -53,6 +53,7 @@
           )
           code = await getClientCode(moduleName, `${serviceName}/${clientFilePath}`)
           loading = false;
+          toast.success('Ready!')
       } catch (error) {
           toast.error('Failed to load')
       }

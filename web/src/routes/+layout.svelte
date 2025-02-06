@@ -6,6 +6,8 @@
 	import { openNewTab, routeToPage }  from "$lib/utils";
 	import { DEFAULT_ROUTE, ISSUE_URL } from "$lib/constants";
 	let { children } = $props();
+
+	import { toast } from 'svelte-sonner';
 </script>
 
 <Toaster />
@@ -55,16 +57,16 @@
 				Print
 				<Menubar.Shortcut>⌘P</Menubar.Shortcut>
 			</Menubar.Item>
-			<Menubar.Item>Save as PDF</Menubar.Item>
+			<!-- <Menubar.Item>Save as PDF</Menubar.Item> -->
     </Menubar.Content>
   </Menubar.Menu>
 	<Menubar.Menu>
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item>
+			<Menubar.Item on:click={() => toast.info('Work in progress')}>
 				Contact
 			</Menubar.Item>
-			<Menubar.Item>
+			<Menubar.Item on:click={() => toast.info('Work in progress')}>
 				Feedback
 			</Menubar.Item>
 			<Menubar.Item on:click={() => openNewTab(ISSUE_URL)}>

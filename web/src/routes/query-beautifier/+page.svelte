@@ -44,6 +44,7 @@
           );
           code = await getClientCode(moduleName, `${serviceName}/${clientFilePath}`)
           loading = false;
+          toast.success('Ready!')
       } catch (error) {
           toast.error('Failed to load')
       }
@@ -63,10 +64,7 @@
     }).catch((error) => {
       console.error("Error:", error);
     });
-
   }
-
-
   $: runClientCode(pyodide, queryInput)
 </script>
 

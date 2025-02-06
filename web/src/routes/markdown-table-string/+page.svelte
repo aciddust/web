@@ -40,7 +40,7 @@
             )
           );
           loading = false;
-          toast.success('Pyodide: Ready!')
+          toast.success('Ready!')
       } catch (error) {
           toast.error('Pyodide: Failed to load')
       }
