@@ -49,3 +49,14 @@ Phasellus vestibulum efficitur nisl id vestibulum. Vestibulum ante ipsum primis 
 Ut a efficitur augue, quis dictum lacus. In hac habitasse platea dictumst. Sed non dolor ut tortor semper dapibus. Suspendisse efficitur sodales quam, et commodo leo pharetra nec. Cras congue lectus vitae euismod finibus. Maecenas nec semper odio, sit amet egestas sem. Proin sed eleifend risus, sit amet consectetur leo. Sed bibendum risus vitae ante condimentum consectetur. Praesent varius, leo non rhoncus mollis, metus justo sagittis arcu, vitae mollis elit ante eget lectus. Vivamus convallis ullamcorper diam ut aliquet.`
 
 export const wordCloudStopwordsExample = ``
+
+export const encoderDecoderExample = {
+  base64: {
+    encode: "SGVsbG8gd29ybGQ=",
+    decode: "Hello world"
+  },
+  url: {
+    encode: "https%3A%2F%2Fexample.io%2Ftest%3Fname%3Djohn%26age%3D20",
+    decode: "https://example.io/test?name=john&age=20"
+  }
+}

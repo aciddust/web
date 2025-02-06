@@ -27,6 +27,9 @@
 			<Menubar.Item on:click={() => routeToPage('wordcloud-generator')}>
 				WordCloud Generator
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('encoder-decoder')}>
+				Encoder/Decoder
+			</Menubar.Item>
 			<Menubar.Item on:click={() => routeToPage('diff-checker')}>
 				Diff Checker
 			</Menubar.Item>
