@@ -97,15 +97,15 @@
   <br>
   <Skeleton class="h-10 w-full" />
 {:else}
-  <p>WordCloud Generator</p>
+  <h1 class="text-2xl font-bold">Wordcloud Generator</h1>
   <div class="flex justify-stretch space-y-4">
     <div class="flex flex-col pt-4 w-full pb-4">
-      <div class="flex flex-col w-full">
-        <label for="wordcloud-input">Input</label>
+      <div class="flex flex-col space-y-2">
+        <h2 class="text-xl font-bold">Input</h2>
         <Textarea bind:value={wordCloudInput} class="w-full h-48 p-2 border rounded-md" id="wordcloud-input"/>
       </div>
-      <div class="flex flex-col w-full">
-        <label for="wordcloud-stopwords">Stopwords</label>
+      <div class="flex flex-col space-y-2 pt-4">
+        <h2 class="text-xl font-bold">Stopwords</h2>
         <Textarea bind:value={wordCloudStopwords} class="w-full h-48 p-2 border rounded-md" id="wordcloud-stopwords"/>
       </div>
     </div>

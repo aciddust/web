@@ -79,22 +79,15 @@
   <br>
   <Skeleton class="h-10 w-full" />
 {:else}
-  <!-- <div>Pyodide ready!</div> -->
-  <!-- check python version -->
-  <!-- {#await runPython(pyodide, "import sys; sys.version") then version}
-    <div>Python version: {version}</div>
-  {:catch error}
-    <div>Python version check failed: {error.message}</div>
-  {/await} -->
   <div class="flex flex-col space-y-4">
     <div class="flex flex-col space-y-4">
-      <p>Markdown Table to String</p>
+      <h1 class="text-2xl font-bold">Markdown Table to String</h1>
       <div class="flex flex-col space-y-2">
-        <label for="markdown-table-input">Input</label>
+        <h2 class="text-xl font-bold">Input</h2>
         <Textarea bind:value={markdownTableInput} class="w-full h-48 p-2 border rounded-md" id="markdown-table-input"/>
       </div>
       <div class="flex flex-col space-y-2">
-        <label for="markdown-table-output">Output</label>
+        <h2 class="text-xl font-bold">Output</h2>
         <Textarea bind:value={markdownTableOutput} class="w-full h-48 p-2 border rounded-md" id="markdown-table-output"/>
       </div>
     </div>

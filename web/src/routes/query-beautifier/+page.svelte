@@ -85,13 +85,13 @@
 {:else}
   <div class="flex flex-col space-y-4">
     <div class="flex flex-col space-y-4">
-      <p>Query Beautifier</p>
+      <h1 class="text-2xl font-bold">Query Beautifier</h1>
       <div class="flex flex-col space-y-2">
-        <label for="query-input">Input</label>
+        <h2 class="text-xl font-bold">Input</h2>
         <Textarea bind:value={queryInput} class="w-full h-48 p-2 border rounded-md" id="query-input"/>
       </div>
       <div class="flex flex-col space-y-2">
-        <label for="query-output">Output</label>
+        <h2 class="text-xl font-bold">Output</h2>
         <Textarea bind:value={queryOutput} class="w-full h-48 p-2 border rounded-md" id="query-output"/>
       </div>
     </div>
