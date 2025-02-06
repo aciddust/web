@@ -38,8 +38,12 @@
 			<Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
 				Korean Map Extractor
 			</Menubar.Item>
+			<Menubar.Separator />
 			<Menubar.Item on:click={() => routeToPage('asmr-channel')}>
 				ASMR
+			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('chill')}>
+				Chill
 			</Menubar.Item>
       <Menubar.Separator />
       <Menubar.Item on:click={async () => {
