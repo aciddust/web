@@ -1,0 +1,80 @@
+<!-- 이름, 이메일, 전화번호, 문의내용, 전송 버튼 -->
+<script lang="ts">
+  import { toast } from 'svelte-sonner';
+  import { writable } from 'svelte/store';
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+
+  const name = writable('');
+  const email = writable('');
+  const phone = writable('');
+  const content = writable('');
+
+  const sendFeedback = async (data: { name: string; email: string; phone: string; content: string }) => {
+    // fetch serverside api
+  };
+
+  async function submitFeedback() {
+    if ($name === '' || $email === '' || $content === '') {
+      toast.error('Please fill out all fields');
+      return;
+    }
+
+    // email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test($email)) {
+      toast.error('Invalid email');
+      return;
+    }
+
+    // content validation
+    if ($content.length < 10) {
+      toast.error('Content must be at least 10 characters');
+      return;
+    }
+
+    toast.error("This feature is not available yet. Please try again later.");
+    // try {
+    //   await sendFeedback({
+    //     name: $name,
+    //     email: $email,
+    //     phone: $phone,
+    //     content: $content,
+    //   });
+    //   toast.success('Feedback sent');
+    // } catch (error) {
+    //   toast.error('Failed to send feedback');
+    // }
+  }
+</script>
+
+<div class="container">
+  <div class="flex flex-col space-y-4">
+    <div class="flex flex-col space-y-2">
+      <h1 class="text-2xl font-bold">Feedback</h1>
+    </div>
+    <div class="flex w-full space-x-4">
+      <div class="flex w-full flex-col space-y-2">
+        <h2 class="text-lg font-bold">Name</h2>
+        <Input id="name" type="text" class="input" bind:value={$name} />
+      </div>
+      <div class="flex w-full flex-col space-y-2">
+        <h2 class="text-lg font-bold">Email</h2>
+        <!-- validate email -->
+        <Input id="email" type="email" class="input" bind:value={$email} />
+      </div>
+      <div class="flex w-full flex-col space-y-2">
+        <h2 class="text-lg font-bold">Phone</h2>
+        <Input id="phone" type="tel" class="input" bind:value={$phone} />
+      </div>
+    </div>
+    <div class="flex w-full space-x-4">
+      <div class="flex w-full flex-col space-y-2">
+        <h2 class="text-lg font-bold">Content</h2>
+        <Textarea id="content" class="input h-80" bind:value={$content} />
+      </div>
+    </div>
+    <Button on:click={submitFeedback}>Submit</Button>
+  </div>
+</div>

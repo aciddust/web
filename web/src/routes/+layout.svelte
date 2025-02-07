@@ -70,7 +70,7 @@
 			<Menubar.Item on:click={() => toast.info('Work in progress')}>
 				Contact
 			</Menubar.Item>
-			<Menubar.Item on:click={() => toast.info('Work in progress')}>
+			<Menubar.Item on:click={() => routeToPage('misc/feedback')}>
 				Feedback
 			</Menubar.Item>
 			<Menubar.Item on:click={() => openNewTab(ISSUE_URL)}>
