@@ -55,7 +55,7 @@
   ) {
     const folder = gui.addFolder(modelName);
     // dev 실행환경일떄만
-    if (import.meta.env.VITE_MODE === 'development') {
+    if (import.meta.env.MODE === 'development') {
       folder.add(modelGroup.position, 'x').min(-10).max(10).step(0.1).name(`${modelName}_x`);
       folder.add(modelGroup.position, 'y').min(-10).max(10).step(0.1).name(`${modelName}_y`);
       folder.add(modelGroup.position, 'z').min(-10).max(10).step(0.1).name(`${modelName}_z`);
