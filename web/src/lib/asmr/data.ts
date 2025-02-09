@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import { type GLTF } from 'three/examples/jsm/Addons.js';
 
 export const audio: { [key: string]: string } = {
@@ -21,6 +20,7 @@ export const audioVolume: { [key: string]: number } = {
 };
 
 export const modelPath: { [key: string]: string } = {
+  headphones: '/asmr/models/headphones.glb',
   bird: '/asmr/models/bird.glb',
   fireplace: '/asmr/models/lowpoly_bonfire.glb',
   footsteps: '/asmr/models/shoe.glb',
@@ -32,6 +32,7 @@ export const modelPath: { [key: string]: string } = {
 };
 
 export const modelLoaded: { [key: string]: boolean } = {
+  headphones: false,
   bird: false,
   fireplace: false,
   footsteps: false,

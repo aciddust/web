@@ -89,6 +89,40 @@
     }
   }
 
+  function loadStaticModel(
+    modelType: keyof modelPathType,
+    position?: THREE.Vector3,
+    scale?: THREE.Vector3,
+    rotate?: THREE.Euler,
+    gui?: dat.GUI,
+  ) {
+    gltfLoader.loadAsync(modelPath[modelType]).then((gltf) => {
+      console.debug(`Loading model: ${modelType}`);
+      console.debug('Position:', position);
+      console.debug('Scale:', scale);
+      console.debug('Rotation:', rotate);
+      const modelGroup = new THREE.Group();
+      if (position) {
+        gltf.scene.position.copy(position)
+        console.debug('Applied position: ', gltf.scene.position);
+      }
+      if (scale) {
+        gltf.scene.scale.copy(scale)
+      }
+      if (rotate) {
+        gltf.scene.rotation.copy(rotate)
+      }
+      modelGroup.add(gltf.scene);
+      modelGroup.name = String(modelType);
+      scene.add(modelGroup);
+      modelLoaded[modelType] = true;
+    }).catch((error) => {
+      console.error(error);
+      toast.error("Failed to load model");
+      return;
+    });
+  }
+
   async function loadModel(
     modelType: keyof modelPathType,
     volume: number,
@@ -240,6 +274,8 @@
       'resize',
       () => handleResize()
     );
+
+    loadStaticModel('headphones', new THREE.Vector3(0, 0, 0), new THREE.Vector3(12, 12, 12));
 
     // 렌더링 시작
     animate();
