@@ -113,14 +113,14 @@
         return;
       }
     }
-    console.log(`Loading model: ${modelType}`);
-    console.log('Position:', position);
-    console.log('Scale:', scale);
-    console.log('Rotation:', rotate);
+    console.debug(`Loading model: ${modelType}`);
+    console.debug('Position:', position);
+    console.debug('Scale:', scale);
+    console.debug('Rotation:', rotate);
     const modelGroup = new THREE.Group();
     if (position) {
       gltf.scene.position.copy(position)
-      console.log('Applied position: ', gltf.scene.position);
+      console.debug('Applied position: ', gltf.scene.position);
     }
     if (scale) {
       gltf.scene.scale.copy(scale)
