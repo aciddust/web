@@ -37,6 +37,12 @@
     mouse.y = -((event.clientY - rect.top) / container.clientHeight) * 2 + 1;
   }
 
+  function audioPlayingFalseAll() {
+    for (const key in audioPlaying) {
+      audioPlaying[key] = false;
+    }
+  }
+
   // 리사이즈 핸들러
   function handleResize() {
     const width = container.clientWidth;
@@ -250,6 +256,8 @@
           child.disconnect();
         }
       });
+      // 오디오 재생상태 비활성화
+      audioPlayingFalseAll();
       // 디버거 제거
       gui.destroy();
       container.removeChild(renderer.domElement);
