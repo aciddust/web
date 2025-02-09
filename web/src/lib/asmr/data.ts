@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { type GLTF } from 'three/examples/jsm/Addons.js';
 
 export const audio: { [key: string]: string } = {
   bird: '/asmr/sounds/bird.mp3',
@@ -8,6 +9,7 @@ export const audio: { [key: string]: string } = {
   keyboard: '/asmr/sounds/typing-keyboard.mp3',
   phone: '/asmr/sounds/typing-iphone.mp3',
 };
+
 export const audioPlaying: { [key: string]: boolean } = {};
 export const audioVolume: { [key: string]: number } = {
   bird: 0.7,
@@ -17,6 +19,7 @@ export const audioVolume: { [key: string]: number } = {
   keyboard: 0.3,
   phone: 0.3,
 };
+
 export const modelPath: { [key: string]: string } = {
   bird: '/asmr/models/bird.glb',
   fireplace: '/asmr/models/lowpoly_bonfire.glb',
@@ -27,6 +30,7 @@ export const modelPath: { [key: string]: string } = {
   pikminPurple: '/asmr/models/pikmin-purple.glb',
   pikminRed: '/asmr/models/pikmin-red.glb',
 };
+
 export const modelLoaded: { [key: string]: boolean } = {
   bird: false,
   fireplace: false,
@@ -37,3 +41,5 @@ export const modelLoaded: { [key: string]: boolean } = {
   pikminPurple: false,
   pikminRed: false,
 };
+
+export const gltfCache: { [key: string]: GLTF } = {};

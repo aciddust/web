@@ -3,7 +3,7 @@
 	import { toast } from 'svelte-sonner';
   import * as dat from 'lil-gui'
   import * as THREE from 'three';
-  import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+  import { GLTFLoader, type GLTF } from 'three/examples/jsm/Addons.js';
 
   import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
   import type { modelPathType } from '$lib/asmr/interfaces';
@@ -13,6 +13,7 @@
     audioVolume,
     modelPath,
     modelLoaded,
+    gltfCache,
   } from '$lib/asmr/data';
 	import Button from '$lib/components/ui/button/button.svelte';
 
@@ -97,48 +98,58 @@
     gui?: dat.GUI,
   ) {
     modelLoading = true;
-    await gltfLoader.loadAsync(modelPath[modelType]).then((gltf) => {
-      console.log(`Loading model: ${modelType}`);
-      console.log('Position:', position);
-      console.log('Scale:', scale);
-      console.log('Rotation:', rotate);
-      const modelGroup = new THREE.Group();
-      if (position) {
-        gltf.scene.position.copy(position)
-        console.log('Applied position: ', gltf.scene.position);
+    toast.loading("Loading...");
+    let gltf: GLTF;
+    if (gltfCache[modelType]) {
+      gltf = gltfCache[modelType];
+    } else {
+      try {
+        gltf = await gltfLoader.loadAsync(modelPath[modelType]);
+        gltfCache[modelType] = gltf;
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load model");
+        modelLoading = false;
+        return;
       }
-      if (scale) {
-        gltf.scene.scale.copy(scale)
-      }
-      if (rotate) {
-        gltf.scene.rotation.copy(rotate)
-      }
-      modelGroup.add(gltf.scene);
-      // positional audio 추가
-      const sound = new THREE.PositionalAudio(listener);
-      const audioLoader = new THREE.AudioLoader();
-      audioLoader.load(audio[modelType], (buffer) => {
-        sound.setBuffer(buffer);
-        sound.setRefDistance(5);
-        sound.setRolloffFactor(1);
-        sound.setLoop(true);
-        sound.setVolume(volume);
-        sound.play();
-      });
-      modelGroup.add(sound);
-      modelGroup.name = String(modelType);
-      scene.add(modelGroup);
-      draggableObjects.push(modelGroup);
-      if (gui) {
-        applyDebug(gui, String(modelType), modelGroup, sound, volume);
-      }
-      modelLoaded[modelType] = true;
-      audioPlaying[modelType] = true;
-      toast.success("😊");
-    }).catch((error) => {
-      console.error('An error happened', error);
-      toast.error('😢');
+    }
+    console.log(`Loading model: ${modelType}`);
+    console.log('Position:', position);
+    console.log('Scale:', scale);
+    console.log('Rotation:', rotate);
+    const modelGroup = new THREE.Group();
+    if (position) {
+      gltf.scene.position.copy(position)
+      console.log('Applied position: ', gltf.scene.position);
+    }
+    if (scale) {
+      gltf.scene.scale.copy(scale)
+    }
+    if (rotate) {
+      gltf.scene.rotation.copy(rotate)
+    }
+    modelGroup.add(gltf.scene);
+    // positional audio 추가
+    const sound = new THREE.PositionalAudio(listener);
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load(audio[modelType], (buffer) => {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(5);
+      sound.setRolloffFactor(1);
+      sound.setLoop(true);
+      sound.setVolume(volume);
+      sound.play();
     });
+    modelGroup.add(sound);
+    modelGroup.name = String(modelType);
+    scene.add(modelGroup);
+    draggableObjects.push(modelGroup);
+    if (gui) {
+      applyDebug(gui, String(modelType), modelGroup, sound, volume);
+    }
+    modelLoaded[modelType] = true;
+    audioPlaying[modelType] = true;
+    toast.success("😊");
     modelLoading = false;
   }
 
