@@ -39,7 +39,7 @@
 				Korean Map Extractor
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={() => routeToPage('asmr-channel')}>
+			<Menubar.Item on:click={() => routeToPage('asmr')}>
 				ASMR
 			</Menubar.Item>
 			<Menubar.Item on:click={() => routeToPage('chill')}>
