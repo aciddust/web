@@ -15,6 +15,7 @@
     modelLoaded,
   } from '$lib/asmr/data';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { time } from 'three/tsl';
 
   let scene: THREE.Scene;
   let container: HTMLDivElement;
@@ -26,8 +27,8 @@
   let gltfLoader: GLTFLoader;
   let dragControls: DragControls;
   let draggableObjects: THREE.Object3D[] = [];
-  let textureLoader: THREE.TextureLoader;
   let gui: dat.GUI
+  let modelLoading = false;
 
   function onMouseMove(
     event: MouseEvent,
@@ -75,14 +76,14 @@
   }
 
   function cleanDebug(gui: dat.GUI, modelName: string) {
-    const folder = gui.folders.find((f) => f._title === modelName);
+    const folder = gui.folders.find((f: any) => f._title === modelName);
     if (folder) {
       // root 제거
       folder.destroy();
     }
   }
 
-  function loadModel(
+  async function loadModel(
     modelType: keyof modelPathType,
     volume: number,
     position?: THREE.Vector3,
@@ -90,6 +91,8 @@
     rotate?: THREE.Euler,
     gui?: dat.GUI,
   ) {
+    modelLoading = true;
+    toast.info('Loading model...');
     gltfLoader.loadAsync(modelPath[modelType]).then(gltf => {
       console.log(`Loading model: ${modelType}`);
       console.log('Position:', position);
@@ -126,10 +129,15 @@
       if (gui) {
         applyDebug(gui, String(modelType), modelGroup, sound, volume);
       }
+    }).catch((error) => {
+      console.error('An error happened', error);
+      toast.error('Failed to load model');
     });
+    modelLoading = false;
+    toast.success('Model loaded');
   }
 
-  function toggleModel(
+  async function toggleModel(
     modelType: keyof modelPathType,
     volume: number,
     position?: THREE.Vector3,
@@ -156,7 +164,7 @@
         scene.remove(object);
       }
     } else {
-      loadModel(
+      await loadModel(
         modelType,
         volume,
         position,
@@ -176,7 +184,6 @@
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.add(listener);
     renderer = new THREE.WebGLRenderer({antialias: true});
-    textureLoader = new THREE.TextureLoader();
     gltfLoader = new GLTFLoader();
     gui = new dat.GUI();
     dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
@@ -200,10 +207,6 @@
     // 컨테이너 크기에 맞게 랜더러 설정
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
-
-    // 이미지 로드
-    // const texture = textureLoader.load('/asmr/night-sky.jpg');
-    // scene.background = texture;
 
     // 배경 색 설정
     renderer.setClearColor(0xD1B7A1, 1);
@@ -255,8 +258,9 @@
 </div>
 <div class="flex justify-center items-center space-x-2 pt-4">
   <Button
+    disabled={modelLoading}
     class="{audioPlaying['fireplace'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['fireplace'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => toggleModel(
+    on:click={async () => await toggleModel(
       'fireplace',
       audioVolume['fireplace'],
       new THREE.Vector3(0, 0, 0),
@@ -266,8 +270,9 @@
     )
   }>🔥</Button>
   <Button
+    disabled={modelLoading}
     class="{audioPlaying['bird'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['bird'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => toggleModel(
+    on:click={async () => await toggleModel(
       'bird',
       audioVolume['bird'],
       new THREE.Vector3(0, 0, 0),
@@ -277,8 +282,9 @@
     )
   }>🦜</Button>
   <Button
+    disabled={modelLoading}
     class="{audioPlaying['rain'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['bird'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => toggleModel(
+    on:click={async () => await toggleModel(
       'rain',
       audioVolume['rain'],
       new THREE.Vector3(0, 0, 0),
@@ -288,8 +294,9 @@
     )
   }>☔</Button>
   <Button
+    disabled={modelLoading}
     class="{audioPlaying['keyboard'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['keyboard'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => toggleModel(
+    on:click={async () => await toggleModel(
       'keyboard',
       audioVolume['keyboard'],
       new THREE.Vector3(0, 0, 0),
@@ -299,8 +306,9 @@
     )
   }>💻</Button>
   <Button
+    disabled={modelLoading}
     class="{audioPlaying['footsteps'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['footsteps'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => toggleModel(
+    on:click={async () => await toggleModel(
       'footsteps',
       audioVolume['footsteps'],
       new THREE.Vector3(0, 0, 0),
@@ -310,8 +318,9 @@
     )
   }>👞</Button>
   <Button
+    disabled={modelLoading}
     class="{audioPlaying['phone'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['phone'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => toggleModel(
+    on:click={async () => await toggleModel(
       'phone',
       audioVolume['phone'],
       new THREE.Vector3(0, 0, 0),
