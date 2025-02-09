@@ -15,7 +15,6 @@
     modelLoaded,
   } from '$lib/asmr/data';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { time } from 'three/tsl';
 
   let scene: THREE.Scene;
   let container: HTMLDivElement;
@@ -92,8 +91,7 @@
     gui?: dat.GUI,
   ) {
     modelLoading = true;
-    toast.info('Loading model...');
-    gltfLoader.loadAsync(modelPath[modelType]).then(gltf => {
+    await gltfLoader.loadAsync(modelPath[modelType]).then((gltf) => {
       console.log(`Loading model: ${modelType}`);
       console.log('Position:', position);
       console.log('Scale:', scale);
@@ -123,18 +121,19 @@
       });
       modelGroup.add(sound);
       modelGroup.name = String(modelType);
-      modelLoaded[modelType] = true;
       scene.add(modelGroup);
       draggableObjects.push(modelGroup);
       if (gui) {
         applyDebug(gui, String(modelType), modelGroup, sound, volume);
       }
+      modelLoaded[modelType] = true;
+      audioPlaying[modelType] = true;
+      toast.success("😊");
     }).catch((error) => {
       console.error('An error happened', error);
-      toast.error('Failed to load model');
+      toast.error('😢');
     });
     modelLoading = false;
-    toast.success('Model loaded');
   }
 
   async function toggleModel(
@@ -163,6 +162,8 @@
         }
         scene.remove(object);
       }
+      modelLoaded[modelType] = false;
+      audioPlaying[modelType] = false;
     } else {
       await loadModel(
         modelType,
@@ -173,8 +174,6 @@
         debugGui,
       );
     }
-    modelLoaded[modelType] = !modelLoaded[modelType];
-    audioPlaying[modelType] = !audioPlaying[modelType];
   }
 
   onMount(() => {
