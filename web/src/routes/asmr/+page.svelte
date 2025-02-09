@@ -243,6 +243,15 @@
         'mousemove',
         (event) => onMouseMove(event)
       );
+      // 모든 사운드 중단
+      scene.traverse((child) => {
+        if (child instanceof THREE.PositionalAudio) {
+          child.stop();
+          child.disconnect();
+        }
+      });
+      // 디버거 제거
+      gui.destroy();
       container.removeChild(renderer.domElement);
     };
   });
