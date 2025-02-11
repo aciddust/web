@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+# contact_links:
+#   - name: 🐞 버그제보
+#     url: https://github.com/d3fau1t/web/issues/new?template=10_bug_report.md&labels=bug
+#     about: 버그를 발견하셨나요? 여기에 제보해주세요.
+#   - name: ✨ 기능 제안
+#     url: https://github.com/d3fau1t/web/issues/new?template=20_feature_request.md&labels=enhancement
+#     about: 새로운 기능이나 개선사항을 제안해주세요.
+#   - name: ❓ 질문하기
+#     url: https://github.com/d3fau1t/web/issues/new?template=99_question.md&labels=question
+#     about: 프로젝트에 대해 궁금한 점이 있으신가요?
