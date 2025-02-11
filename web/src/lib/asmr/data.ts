@@ -11,12 +11,12 @@ export const audio: { [key: string]: string } = {
 
 export const audioPlaying: { [key: string]: boolean } = {};
 export const audioVolume: { [key: string]: number } = {
-  bird: 0.7,
-  fireplace: 0.5,
-  footsteps: 0.3,
-  rain: 0.5,
-  keyboard: 0.3,
-  phone: 0.3,
+  bird: 1,
+  fireplace: 0.8,
+  footsteps: 0.6,
+  rain: 0.8,
+  keyboard: 0.6,
+  phone: 0.6,
 };
 
 export const modelPath: { [key: string]: string } = {

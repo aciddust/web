@@ -75,7 +75,7 @@
     }
     folder.add({ volume: volume || sound.getVolume() }, 'volume')
       .min(0)
-      .max(1)
+      .max(2)
       .step(0.1)
       .name('volume')
       .onChange((value: number) => sound.setVolume(value));
