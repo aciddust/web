@@ -7,16 +7,18 @@ export const audio: { [key: string]: string } = {
   rain: '/asmr/sounds/rain.mp3',
   keyboard: '/asmr/sounds/typing-keyboard.mp3',
   phone: '/asmr/sounds/typing-iphone.mp3',
+  piano: '/asmr/sounds/piano-1.mp3',
 };
 
 export const audioPlaying: { [key: string]: boolean } = {};
 export const audioVolume: { [key: string]: number } = {
-  bird: 1,
-  fireplace: 0.8,
-  footsteps: 0.6,
-  rain: 0.8,
-  keyboard: 0.6,
-  phone: 0.6,
+  bird: 1.3,
+  fireplace: 1.1,
+  footsteps: 0.9,
+  rain: 1.1,
+  keyboard: 0.9,
+  phone: 0.9,
+  piano: 0.9,
 };
 
 export const modelPath: { [key: string]: string } = {
@@ -29,6 +31,7 @@ export const modelPath: { [key: string]: string } = {
   phone: '/asmr/models/iphone_x.glb',
   pikminPurple: '/asmr/models/pikmin-purple.glb',
   pikminRed: '/asmr/models/pikmin-red.glb',
+  piano: '/asmr/models/mini_piano.glb',
 };
 
 export const modelLoaded: { [key: string]: boolean } = {
@@ -41,6 +44,7 @@ export const modelLoaded: { [key: string]: boolean } = {
   phone: false,
   pikminPurple: false,
   pikminRed: false,
+  piano: false,
 };
 
 export const gltfCache: { [key: string]: GLTF } = {};
