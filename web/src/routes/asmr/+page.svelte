@@ -16,6 +16,7 @@
     gltfCache,
   } from '$lib/asmr/data';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import BottomDrawer from './soundButton.svelte';
 
   let scene: THREE.Scene;
   let container: HTMLDivElement;
@@ -29,6 +30,11 @@
   let draggableObjects: THREE.Object3D[] = [];
   let gui: dat.GUI
   let modelLoading = false;
+  let soundCloudActive = false;
+
+  function activateSoundCloud() {
+    soundCloudActive = !soundCloudActive;
+  }
 
   function onMouseMove(
     event: MouseEvent,
@@ -75,7 +81,7 @@
     }
     folder.add({ volume: volume || sound.getVolume() }, 'volume')
       .min(0)
-      .max(2)
+      .max(4)
       .step(0.1)
       .name('volume')
       .onChange((value: number) => sound.setVolume(value));
@@ -235,9 +241,19 @@
     camera.add(listener);
     renderer = new THREE.WebGLRenderer({antialias: true});
     gltfLoader = new GLTFLoader();
-    gui = new dat.GUI();
+    gui = new dat.GUI(
+      {
+        autoPlace: true,
+        width: 100,
+        title: 'ASMR',
+        closeFolders: true,
+        injectStyles: true,
+        touchStyles: 1,
+      }
+    );
     dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
     dragControls.transformGroup = true;
+    soundCloudActive = false;
 
     const player = new THREE.Object3D();
     player.position.set(0, 0, 0);
@@ -312,14 +328,16 @@
   });
 </script>
 
-<div style="width: 100%; height: 80vh;" bind:this={container}>
-  {#if loading}
-    <div class="flex justify-center items-center h-full">
-      <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-    </div>
-  {/if}
+<div class="flex">
+  <div style="width: 100vw; height: 80vh;" bind:this={container}>
+    {#if loading}
+      <div class="flex justify-center items-center h-full">
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    {/if}
+  </div>
 </div>
-<div class="flex justify-center items-center space-x-2 pt-4">
+<div class="flex justify-center items-center space-x-2 pt-4 overflow-y-auto">
   <Button
     disabled={modelLoading}
     class="{audioPlaying['fireplace'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['fireplace'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
@@ -392,4 +410,12 @@
       gui,
     )
   }>📱</Button>
+  <Button
+    disabled={modelLoading}
+    class="{audioPlaying['piano'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['piano'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+    on:click={() => {activateSoundCloud()}}
+  >🎹</Button>
+  {#if soundCloudActive}
+    <BottomDrawer />
+  {/if}
 </div>
