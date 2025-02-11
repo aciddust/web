@@ -244,7 +244,7 @@
     gui = new dat.GUI(
       {
         autoPlace: true,
-        width: 100,
+        width: 200,
         title: 'ASMR',
         closeFolders: true,
         injectStyles: true,
@@ -410,6 +410,18 @@
       gui,
     )
   }>📱</Button>
+  <Button
+    disabled={modelLoading}
+    class="{audioPlaying['beach'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['beach'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+    on:click={async () => await toggleModel(
+      'beach',
+      audioVolume['beach'],
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0.02, 0.02, 0.02),
+      new THREE.Euler(0, 0, 0),
+      gui,
+    )}>
+  🌴</Button>
   <Button
     disabled={modelLoading}
     class="{audioPlaying['piano'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['piano'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
