@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import Button from '../ui/button/button.svelte';
 
   let cubeElement: HTMLPreElement;
   let width = 80;
@@ -18,6 +19,9 @@
   const speedY = Math.random() * 0.05 + 0.01;
   const speedZ = Math.random() * 0.05 + 0.01;
   let loaded = false;
+  let isXMouseOver = false;
+  let isYMouseOver = false;
+  let isZMouseOver = false;
 
   function createCubePoints(size: number) {
     const d = size / 24;
@@ -119,7 +123,121 @@
   });
 </script>
 
-<pre
-  bind:this={cubeElement}
-  style="font-size: 12px; line-height: 1em;"
-></pre>
+<div class="flex flex-col justify-center p-4 space-y-4 space-x-4">
+  <pre
+    bind:this={cubeElement}
+    style="font-size: 12px; line-height: 1em;"
+  ></pre>
+  {#if !isSpinning}
+  <div class="flex justify-center p-4  space-x-4">
+    <div
+      role="button"
+      tabindex="0"
+      on:mouseover={
+        async () => {
+          isXMouseOver = true;
+          while (isXMouseOver) {
+            angleX += 0.1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+      }
+      on:focus={
+        async () => {
+          isXMouseOver = true;
+          while (isXMouseOver) {
+            angleX += 0.1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+      }
+      on:mouseout={
+        () => {
+          isXMouseOver = false;
+        }
+      }
+      on:blur={
+        () => {
+          isXMouseOver = false;
+        }
+      }
+    >
+      <Button
+        variant="outline"
+      >X</Button>
+    </div>
+    <div
+      role="button"
+      tabindex="0"
+      on:mouseover={
+        async () => {
+          isYMouseOver = true;
+          while (isYMouseOver) {
+            angleY += 0.1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+      }
+      on:focus={
+        async () => {
+          isYMouseOver = true;
+          while (isYMouseOver) {
+            angleY += 0.1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+      }
+      on:mouseout={
+        () => {
+          isYMouseOver = false;
+        }
+      }
+      on:blur={
+        () => {
+          isYMouseOver = false;
+        }
+      }
+    >
+      <Button
+        variant="outline"
+      >Y</Button>
+    </div>
+    <div
+      role="button"
+      tabindex="0"
+      on:mouseover={
+        async () => {
+          isZMouseOver = true;
+          while (isZMouseOver) {
+            angleZ += 0.1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+      }
+      on:focus={
+        async () => {
+          isZMouseOver = true;
+          while (isZMouseOver) {
+            angleZ += 0.1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+      }
+      on:mouseout={
+        () => {
+          isZMouseOver = false;
+        }
+      }
+      on:blur={
+        () => {
+          isZMouseOver = false;
+        }
+      }
+    >
+      <Button
+        variant="outline"
+      >Z</Button>
+    </div>
+  </div>
+  {/if}
+</div>
