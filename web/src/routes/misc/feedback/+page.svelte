@@ -8,11 +8,20 @@
 
   const name = writable('');
   const email = writable('');
-  const phone = writable('');
   const content = writable('');
 
-  const sendFeedback = async (data: { name: string; email: string; phone: string; content: string }) => {
-    // fetch serverside api
+  const sendFeedback = async (data: { name: string; email: string; content: string }) => {
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send feedback');
+    }
   };
 
   async function submitFeedback() {
@@ -34,18 +43,22 @@
       return;
     }
 
-    toast.error("This feature is not available yet. Please try again later.");
-    // try {
-    //   await sendFeedback({
-    //     name: $name,
-    //     email: $email,
-    //     phone: $phone,
-    //     content: $content,
-    //   });
-    //   toast.success('Feedback sent');
-    // } catch (error) {
-    //   toast.error('Failed to send feedback');
-    // }
+    toast.promise(
+      sendFeedback({
+        name: $name,
+        email: $email,
+        content: $content,
+      }).then(() => {
+        $name = '';
+        $email = '';
+        $content = '';
+      }).catch(() => {}),
+      {
+        loading: 'Sending feedback...',
+        success: 'Feedback sent',
+        error: 'Failed to send feedback',
+      }
+    );
   }
 </script>
 
@@ -63,10 +76,6 @@
         <h2 class="text-lg font-bold">Email</h2>
         <!-- validate email -->
         <Input id="email" type="email" class="input" bind:value={$email} />
-      </div>
-      <div class="flex w-full flex-col space-y-2">
-        <h2 class="text-lg font-bold">Phone</h2>
-        <Input id="phone" type="tel" class="input" bind:value={$phone} />
       </div>
     </div>
     <div class="flex w-full space-x-4">
