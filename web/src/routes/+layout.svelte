@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { dev } from '$app/environment';
 	import { Toaster } from "$lib/components/ui/sonner";
 	import * as Menubar from "$lib/components/ui/menubar";
 	import Container from "$lib/components/ui/area/container.svelte";
@@ -8,6 +9,10 @@
 	let { children } = $props();
 
 	import { toast } from 'svelte-sonner';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit'
+
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
+
 </script>
 
 <Toaster />
