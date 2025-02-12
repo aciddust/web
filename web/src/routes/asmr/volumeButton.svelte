@@ -31,7 +31,7 @@
         {/if}
       </div>
     </Drawer.Header>
-    <div class="mx-auto w-full max-w-sm">
+    <div class="mx-auto w-full max-w-sm p-4">
       <div>
         <div class="flex flex-col w-full">
           <!-- for-each로 audioPlaying 모든 키 순회하여 writable(true인) 경우만 볼륨 - + 버튼 랜더링 -->
