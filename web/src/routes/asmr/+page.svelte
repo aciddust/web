@@ -21,7 +21,6 @@
 	import BottomDrawer from './soundButton.svelte';
   import VolumeButton from './volumeButton.svelte';
 
-
   let scene: THREE.Scene;
   let container: HTMLDivElement;
   let loading = true;
@@ -35,6 +34,7 @@
   let gui: dat.GUI
   let modelLoading = false;
   let soundCloudActive = false;
+  let soundCloudWidgetIframe: HTMLIFrameElement | null;
 
 
   function updateAudioVolume(modelType: string, newVolume: number) {
@@ -51,6 +51,24 @@
 
   function activateSoundCloud() {
     soundCloudActive = !soundCloudActive;
+    $modelLoaded.piano = soundCloudActive;
+    $audioPlaying.piano = soundCloudActive;
+  }
+
+  function updateSoundCloudVolume(volume: number) {
+    // SC 없으면 실행안함
+    if (!soundCloudActive) {
+      return;
+    }
+    if (!soundCloudWidgetIframe) {
+      soundCloudWidgetIframe = document.querySelector("#scloud-player");
+      if (!soundCloudWidgetIframe) {
+        return;
+      }
+    }
+    // @ts-ignore
+    const fixedWidget = SC.Widget(soundCloudWidgetIframe);
+    fixedWidget.setVolume(volume);
   }
 
   function onMouseMove(
@@ -352,7 +370,11 @@
       Object.keys(audio).forEach((modelType) => {
         const volume = $audioVolume[modelType as keyof typeof audioVolume];
         if ($modelLoaded[modelType]) {
-          updateAudioVolume(modelType, volume);
+          if (modelType === 'piano') {
+            updateSoundCloudVolume(volume);
+          } else {
+            updateAudioVolume(modelType, volume);
+          }
         }
       });
     }

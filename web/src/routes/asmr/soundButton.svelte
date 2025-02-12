@@ -25,6 +25,11 @@
   // 키보드 이벤트 리스너 등록/제거
   onMount(() => {
     window.addEventListener('keydown', handleKeydown);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://w.soundcloud.com/player/api.js';
+    document.head.appendChild(script);
   });
 
   onDestroy(() => {
@@ -51,6 +56,7 @@
   >
     <div class="w-full h-[calc(100%-2rem)]">
       <iframe
+        id="scloud-player"
         width="100%"
         height="100%"
         scrolling="yes"

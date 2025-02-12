@@ -33,8 +33,8 @@ export const audioVolumeDefault: { [key: string]: number } = {
   rain: 1.1,
   keyboard: 0.9,
   phone: 0.9,
-  piano: 0.9,
   beach: 1.1,
+  piano: 30, // FIXME: scloud, not threejs
 };
 
 export const audioPlaying = writable<{ [key: string]: boolean }>({
