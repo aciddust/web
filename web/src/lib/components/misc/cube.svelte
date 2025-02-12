@@ -101,9 +101,11 @@
   }
 
   function animate() {
-    angleX += speedX;
-    angleY += speedY;
-    angleZ += speedZ;
+    if (isSpinning) {
+      angleX += speedX;
+      angleY += speedY;
+      angleZ += speedZ;
+    }
     updateColor();
     renderCube();
     requestAnimationFrame(animate);
