@@ -8,6 +8,7 @@
   let angleX = 0;
   let angleY = 0;
   let angleZ = 0;
+  export let isSpinning: boolean;
   export let red = 237;
   export let green = 132;
   export let blue = 255;

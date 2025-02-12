@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-	import { toast } from 'svelte-sonner';
+  import { get } from 'svelte/store';
+  import { toast } from 'svelte-sonner';
   import * as dat from 'lil-gui'
   import * as THREE from 'three';
   import { GLTFLoader, type GLTF } from 'three/examples/jsm/Addons.js';
@@ -14,9 +15,12 @@
     modelPath,
     modelLoaded,
     gltfCache,
+    emojis,
   } from '$lib/asmr/data';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import BottomDrawer from './soundButton.svelte';
+  import VolumeButton from './volumeButton.svelte';
+
 
   let scene: THREE.Scene;
   let container: HTMLDivElement;
@@ -32,6 +36,19 @@
   let modelLoading = false;
   let soundCloudActive = false;
 
+
+  function updateAudioVolume(modelType: string, newVolume: number) {
+    const object = scene.getObjectByName(String(modelType));
+    if (object) {
+      object.traverse((child) => {
+        if (child instanceof THREE.PositionalAudio) {
+          console.debug('Updating volume:', modelType, newVolume);
+          child.setVolume(newVolume);
+        }
+      });
+    }
+  }
+
   function activateSoundCloud() {
     soundCloudActive = !soundCloudActive;
   }
@@ -46,7 +63,7 @@
 
   function audioPlayingFalseAll() {
     for (const key in audioPlaying) {
-      audioPlaying[key] = false;
+      $audioPlaying[key] = false;
     }
   }
 
@@ -78,13 +95,13 @@
       folder.add(modelGroup.rotation, 'x').min(-Math.PI).max(Math.PI).step(0.1).name(`${modelName}_rotation_x`);
       folder.add(modelGroup.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.1).name(`${modelName}_rotation_y`);
       folder.add(modelGroup.rotation, 'z').min(-Math.PI).max(Math.PI).step(0.1).name(`${modelName}_rotation_z`);
+      folder.add({ volume: volume || sound.getVolume() }, 'volume')
+        .min(0)
+        .max(4)
+        .step(0.1)
+        .name('volume')
+        .onChange((value: number) => sound.setVolume(value));
     }
-    folder.add({ volume: volume || sound.getVolume() }, 'volume')
-      .min(0)
-      .max(4)
-      .step(0.1)
-      .name('volume')
-      .onChange((value: number) => sound.setVolume(value));
   }
 
   function cleanDebug(gui: dat.GUI, modelName: string) {
@@ -121,7 +138,7 @@
       modelGroup.add(gltf.scene);
       modelGroup.name = String(modelType);
       scene.add(modelGroup);
-      modelLoaded[modelType] = true;
+      $modelLoaded[modelType] = true;
     }).catch((error) => {
       console.error(error);
       toast.error("Failed to load model");
@@ -187,8 +204,8 @@
     if (gui) {
       applyDebug(gui, String(modelType), modelGroup, sound, volume);
     }
-    modelLoaded[modelType] = true;
-    audioPlaying[modelType] = true;
+    $modelLoaded[modelType] = true;
+    $audioPlaying[modelType] = true;
     toast.success("😊");
     modelLoading = false;
   }
@@ -202,7 +219,7 @@
     debugGui?: dat.GUI,
   ) {
     const object = scene.getObjectByName(String(modelType));
-    if (modelLoaded[modelType]) {
+    if ($modelLoaded[modelType]) {
       if (object) {
         const index = draggableObjects.indexOf(object);
         if (index > -1) {
@@ -219,8 +236,8 @@
         }
         scene.remove(object);
       }
-      modelLoaded[modelType] = false;
-      audioPlaying[modelType] = false;
+      $modelLoaded[modelType] = false;
+      $audioPlaying[modelType] = false;
     } else {
       await loadModel(
         modelType,
@@ -241,16 +258,18 @@
     camera.add(listener);
     renderer = new THREE.WebGLRenderer({antialias: true});
     gltfLoader = new GLTFLoader();
-    gui = new dat.GUI(
-      {
-        autoPlace: true,
-        width: 200,
-        title: 'ASMR',
-        closeFolders: true,
-        injectStyles: true,
-        touchStyles: 1,
-      }
-    );
+    if (import.meta.env.MODE === 'development') {
+      gui = new dat.GUI(
+        {
+          autoPlace: true,
+          width: 200,
+          title: 'ASMR',
+          closeFolders: true,
+          injectStyles: true,
+          touchStyles: 1,
+        }
+      );
+    }
     dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
     dragControls.transformGroup = true;
     soundCloudActive = false;
@@ -326,6 +345,17 @@
       container.removeChild(renderer.domElement);
     };
   });
+
+  // reactive parts
+  // 오디오 볼륨 변경 감지를 위한 구독
+  $: {
+      Object.keys(audio).forEach((modelType) => {
+        const volume = $audioVolume[modelType as keyof typeof audioVolume];
+        if ($modelLoaded[modelType]) {
+          updateAudioVolume(modelType, volume);
+        }
+      });
+    }
 </script>
 
 <div class="flex">
@@ -337,97 +367,108 @@
     {/if}
   </div>
 </div>
-<div class="flex justify-center items-center space-x-2 pt-4 overflow-y-auto">
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['fireplace'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['fireplace'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'fireplace',
-      audioVolume['fireplace'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0.5, 0.5, 0.5),
-      undefined,
-      gui,
-    )
-  }>🔥</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['bird'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['bird'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'bird',
-      audioVolume['bird'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(1, 1, 1),
-      undefined,
-      gui,
-    )
-  }>🦜</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['rain'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['bird'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'rain',
-      audioVolume['rain'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0.3, 0.3, 0.3),
-      undefined,
-      gui,
-    )
-  }>☔</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['keyboard'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['keyboard'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'keyboard',
-      audioVolume['keyboard'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0.02, 0.02, 0.02),
-      new THREE.Euler(0.5, 0.05, 0.05),
-      gui,
-    )
-  }>💻</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['footsteps'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['footsteps'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'footsteps',
-      audioVolume['footsteps'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0.04, 0.04, 0.04),
-      new THREE.Euler(0.5, 0.05, 0.05),
-      gui,
-    )
-  }>👞</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['phone'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['phone'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'phone',
-      audioVolume['phone'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(3, 3, 3),
-      new THREE.Euler(0.5, 0.05, 0.05),
-      gui,
-    )
-  }>📱</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['beach'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['beach'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={async () => await toggleModel(
-      'beach',
-      audioVolume['beach'],
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0.02, 0.02, 0.02),
-      new THREE.Euler(0, 0, 0),
-      gui,
-    )}>
-  🌴</Button>
-  <Button
-    disabled={modelLoading}
-    class="{audioPlaying['piano'] ? 'bg-green-500' : 'bg-gray-300'} {audioPlaying['piano'] ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-    on:click={() => {activateSoundCloud()}}
-  >🎹</Button>
-  {#if soundCloudActive}
-    <BottomDrawer />
-  {/if}
+<div class="flex justify-center items-center space-x-2 pt-4">
+  <div>
+    <VolumeButton
+      audioVolume={audioVolume}
+      audioPlaying={audioPlaying}
+    ></VolumeButton>
+  </div>
+  <div class="flex items-center space-x-2 overflow-y-auto">
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.fireplace ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.fireplace ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => {
+        await toggleModel(
+          'fireplace',
+          $audioVolume.fireplace,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.5, 0.5, 0.5),
+          undefined,
+          gui,
+        )
+      }
+
+    }>{emojis.fireplace}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.bird ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.bird ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => await toggleModel(
+        'bird',
+        $audioVolume.bird,
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(1, 1, 1),
+        undefined,
+        gui,
+      )}
+    >{emojis.bird}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.rain ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.rain ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => await toggleModel(
+        'rain',
+        $audioVolume.rain,
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0.3, 0.3, 0.3),
+        undefined,
+        gui,
+      )}
+    >{emojis.rain}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.keyboard ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.keyboard ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => await toggleModel(
+        'keyboard', 
+        $audioVolume.keyboard,
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0.02, 0.02, 0.02),
+        new THREE.Euler(0.5, 0.05, 0.05),
+        gui,
+      )}
+    >{emojis.keyboard}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.footsteps ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.footsteps ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => await toggleModel(
+        'footsteps',
+        $audioVolume.footsteps,
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0.04, 0.04, 0.04),
+        new THREE.Euler(0.5, 0.05, 0.05),
+        gui,
+      )}
+    >{emojis.footsteps}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.phone ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.phone ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => await toggleModel(
+        'phone',
+        $audioVolume.phone,
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(3, 3, 3),
+        new THREE.Euler(0.5, 0.05, 0.05),
+        gui,
+      )}
+    >{emojis.phone}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.beach ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.beach ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={async () => await toggleModel(
+        'beach',
+        $audioVolume.beach,
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0.02, 0.02, 0.02),
+        new THREE.Euler(0, 0, 0),
+        gui,
+      )}
+    >{emojis.beach}</Button>
+    <Button
+      disabled={modelLoading}
+      class="{$audioPlaying.piano ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.piano ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+      on:click={() => {activateSoundCloud()}}
+    >{emojis.piano}</Button>
+    {#if soundCloudActive}
+      <BottomDrawer buttonText={emojis.sound}/>
+    {/if}
+  </div>
 </div>

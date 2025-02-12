@@ -2,6 +2,7 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import { onMount, onDestroy } from 'svelte';
 
+  export let buttonText;
   export let isOpen = false;
 
   function toggleDrawer() {
@@ -31,7 +32,7 @@
   });
 </script>
 
-<Button  variant="outline" on:click={toggleDrawer}>🎵</Button>
+<Button  variant="outline" on:click={toggleDrawer}>{buttonText}</Button>
 
 {#if isOpen}
   <div 

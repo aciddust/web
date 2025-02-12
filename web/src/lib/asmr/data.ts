@@ -1,4 +1,19 @@
 import { type GLTF } from 'three/examples/jsm/Addons.js';
+import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
+
+export const emojis: { [key: string]: string } = {
+  volume: '🎚️',
+  bird: '🦜',
+  fireplace: '🔥',
+  footsteps: '👞',
+  rain: '☔',
+  keyboard: '💻',
+  phone: '📱',
+  piano: '🎹',
+  beach: '🏖️',
+  sound: '🎵',
+}
 
 export const audio: { [key: string]: string } = {
   bird: '/asmr/sounds/bird.mp3',
@@ -11,9 +26,8 @@ export const audio: { [key: string]: string } = {
   beach: '/asmr/sounds/ocean-waves.mp3',
 };
 
-export const audioPlaying: { [key: string]: boolean } = {};
-export const audioVolume: { [key: string]: number } = {
-  bird: 1.3,
+export const audioVolumeDefault: { [key: string]: number } = {
+  bird: 1.6,
   fireplace: 1.1,
   footsteps: 0.9,
   rain: 1.1,
@@ -22,6 +36,27 @@ export const audioVolume: { [key: string]: number } = {
   piano: 0.9,
   beach: 1.1,
 };
+
+export const audioPlaying = writable<{ [key: string]: boolean }>({
+  bird: false,
+  fireplace: false,
+  footsteps: false,
+  rain: false,
+  keyboard: false,
+  phone: false,
+  piano: false,
+  beach: false,
+});
+export const audioVolume = writable<{ [key: string]: number }>({
+  bird: audioVolumeDefault.bird,
+  fireplace: audioVolumeDefault.fireplace,
+  footsteps: audioVolumeDefault.footsteps,
+  rain: audioVolumeDefault.rain,
+  keyboard: audioVolumeDefault.keyboard,
+  phone: audioVolumeDefault.phone,
+  piano: audioVolumeDefault.piano,
+  beach: audioVolumeDefault.beach,
+});
 
 export const modelPath: { [key: string]: string } = {
   headphones: '/asmr/models/headphones.glb',
@@ -37,7 +72,7 @@ export const modelPath: { [key: string]: string } = {
   beach: '/asmr/models/palm_tree.glb',
 };
 
-export const modelLoaded: { [key: string]: boolean } = {
+export const modelLoaded = writable<{ [key: string]: boolean }>({
   headphones: false,
   bird: false,
   fireplace: false,
@@ -49,6 +84,6 @@ export const modelLoaded: { [key: string]: boolean } = {
   pikminRed: false,
   piano: false,
   beach: false,
-};
+});
 
 export const gltfCache: { [key: string]: GLTF } = {};
