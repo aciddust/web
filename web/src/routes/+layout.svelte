@@ -75,6 +75,9 @@
       <Menubar.Item on:click={() => routeToPage('gallery')}>
 				Gallery
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('binjector')}>
+				Binjector
+			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 	<Menubar.Menu> <!--2-->

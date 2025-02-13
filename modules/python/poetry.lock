@@ -15,6 +15,21 @@ files = [
 test = ["coverage", "mypy", "pexpect", "ruff", "wheel"]
 
 [[package]]
+name = "binjector"
+version = "0.1.7"
+description = "Inject your data into an image"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "binjector-0.1.7-py3-none-any.whl", hash = "sha256:588411f6765ee5daf8a75f9d55e52d2a17d9f78aef90dac91308c3207e6097fd"},
+]
+
+[package.dependencies]
+click = "*"
+numpy = "*"
+Pillow = "*"
+
+[[package]]
 name = "black"
 version = "25.1.0"
 description = "The uncompromising code formatter."
@@ -1078,4 +1093,4 @@ pillow = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12.7"
-content-hash = "b381559a5941c3e9326b0b4f1a80a0c27cd80ef4e3adee9c484132ff6b351aad"
+content-hash = "fc7d42f18d610892b918151b2e804272266de7c470ee6d1ddcd5416588bf70d7"
