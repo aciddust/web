@@ -28,7 +28,7 @@
 
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'http://w.soundcloud.com/player/api.js';
+    script.src = '//w.soundcloud.com/player/api.js';
     document.head.appendChild(script);
   });
 
