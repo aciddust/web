@@ -40,9 +40,9 @@
 			<Menubar.Item on:click={() => routeToPage('diff-checker')}>
 				Diff Checker
 			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
+			<!-- <Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
 				Korean Map Extractor
-			</Menubar.Item>
+			</Menubar.Item> -->
 			<Menubar.Separator />
 			<Menubar.Item on:click={() => routeToPage('asmr')}>
 				ASMR
