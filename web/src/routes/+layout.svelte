@@ -18,7 +18,7 @@
 <Toaster />
 
 <Menubar.Root>
-  <Menubar.Menu>
+  <Menubar.Menu> <!--0-->
     <Menubar.Trigger>T00LK1T</Menubar.Trigger>
     <Menubar.Content>
       <Menubar.Item on:click={() => routeToPage(DEFAULT_ROUTE)}>
@@ -69,7 +69,15 @@
 			<!-- <Menubar.Item>Save as PDF</Menubar.Item> -->
     </Menubar.Content>
   </Menubar.Menu>
-	<Menubar.Menu>
+	<Menubar.Menu> <!--1-->
+		<Menubar.Trigger>Lab</Menubar.Trigger>
+    <Menubar.Content>
+      <Menubar.Item on:click={() => routeToPage('gallery')}>
+				Gallery
+			</Menubar.Item>
+		</Menubar.Content>
+	</Menubar.Menu>
+	<Menubar.Menu> <!--2-->
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item on:click={() => toast.info('Work in progress')}>
