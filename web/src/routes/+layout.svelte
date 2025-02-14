@@ -40,16 +40,12 @@
 			<Menubar.Item on:click={() => routeToPage('diff-checker')}>
 				Diff Checker
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('hmac')}>
+				HMAC
+			</Menubar.Item>
 			<!-- <Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
 				Korean Map Extractor
 			</Menubar.Item> -->
-			<Menubar.Separator />
-			<Menubar.Item on:click={() => routeToPage('asmr')}>
-				ASMR
-			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('chill')}>
-				Chill
-			</Menubar.Item>
       <Menubar.Separator />
       <Menubar.Item on:click={async () => {
 				// press esc key to close the menu
@@ -75,20 +71,23 @@
       <Menubar.Item on:click={() => routeToPage('gallery')}>
 				Gallery
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('chill')}>
+				Chill
+			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('asmr')}>
+				ASMR
+			</Menubar.Item>
 			<Menubar.Item on:click={() => routeToPage('binjector')}>
 				Binjector
-			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('hmac')}>
-				HMAC
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 	<Menubar.Menu> <!--2-->
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item on:click={() => toast.info('Work in progress')}>
+			<!-- <Menubar.Item on:click={() => toast.info('Work in progress')}>
 				Contact
-			</Menubar.Item>
+			</Menubar.Item> -->
 			<Menubar.Item on:click={() => routeToPage('misc/feedback')}>
 				Feedback
 			</Menubar.Item>
