@@ -59,7 +59,7 @@
                     <Button on:click={() => audioVolume.update(v => ({...v, [key]: Math.max(0, v[key] - 1)}))}>
                     <Minus size="18" />
                     </Button>
-                    <div class="items-center text-center w-8">{$audioVolume[key].toFixed(1)}</div>
+                    <div class="items-center text-center w-8">{$audioVolume[key].toFixed(0)}</div>
                     <Button on:click={() => audioVolume.update(v => ({...v, [key]: Math.min(100, v[key] + 1)}))}>
                     <Plus size="18" />
                     </Button>
@@ -87,7 +87,7 @@
                     <Button on:click={() => audioVolume.update(v => ({...v, [key]: Math.max(0, v[key] - 0.1)}))}>
                     <Minus size="18" />
                     </Button>
-                    <div class="items-center text-center w-8">{$audioVolume[key].toFixed(1)}</div>
+                    <div class="items-center text-center w-8">{(parseFloat($audioVolume[key].toFixed(1)) / 4 * 100).toFixed(0)}</div>
                     <Button on:click={() => audioVolume.update(v => ({...v, [key]: Math.min(4, v[key] + 0.1)}))}>
                     <Plus size="18" />
                     </Button>
