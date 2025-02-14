@@ -78,6 +78,9 @@
 			<Menubar.Item on:click={() => routeToPage('binjector')}>
 				Binjector
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('hmac')}>
+				HMAC
+			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 	<Menubar.Menu> <!--2-->

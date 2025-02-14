@@ -13,5 +13,9 @@ export const PYODIDE_ROUTES = {
   "wordcloud-generator": {
     module: "func",
     clientFilePath: "client.py",
+  },
+  "hmac": {
+    module: "func",
+    clientFilePath: "client.py",
   }
 }
