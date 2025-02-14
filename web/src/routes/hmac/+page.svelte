@@ -122,11 +122,13 @@
       </h1>
     </a>
   </div>
-  <div class="bg-gray-100 p-4 rounded-md">
-    <code lang="plaintext">
-      HMAC(K, m) = H((K ⊕ opad) || H((K ⊕ ipad) || m))
-    </code>
-  </div>
+  <a href="https://github.com/aciddust/web/blob/d4e662a947b5831cb5960628569bc3bfd6f9f2a4/modules/python/hmac/func.py#L21" target="_blank">
+    <div class="bg-gray-100 p-4 rounded-md">
+      <code lang="plaintext">
+        HMAC(K, m) = H((K ⊕ opad) || H((K ⊕ ipad) || m))
+      </code>
+    </div>
+  </a>
   <div class="flex flex-col space-y-2 pt-4">
     <h2 class="text-xl font-bold">Plain Text</h2>
     <Textarea

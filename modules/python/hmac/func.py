@@ -37,8 +37,6 @@ class SHA256(HMACBase):
 
         return outer_hash
 
-    def compare_digest(self, a: bytes, b: bytes) -> bool:
-        ...
 
 class MD5(HMACBase):
     def hmac_digest(self, key: bytes, message: bytes) -> bytes:
