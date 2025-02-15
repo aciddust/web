@@ -3,6 +3,7 @@
   import { Skeleton } from '$lib/components/ui/skeleton';
   import Base64 from './components/base64.svelte';
   import URL from './components/url.svelte';
+  import HashPassword from './components/hash-password.svelte';
 
   let loading = true;
 
@@ -25,5 +26,6 @@
     </div>
     <Base64 />
     <URL />
+    <HashPassword />
   </div>
 {/if}
