@@ -380,22 +380,24 @@
     }
 </script>
 
-<div class="flex flex-col justify-center items-center space-y-2 pt-4">
-  <div style="width: 100vw; height: 80vh;" bind:this={container}>
-    {#if loading}
-      <div class="flex justify-center items-center h-full">
-        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    {/if}
+<div class="overflow-y-auto">
+  <div class="flex flex-col justify-center items-center space-y-2 pt-4">
+    <div style="width: 100vw; height: 80vh;" bind:this={container}>
+      {#if loading}
+        <div class="flex justify-center items-center h-full">
+          <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      {/if}
+    </div>
   </div>
-  <div class="flex justify-center items-center space-x-2 pt-4">
+  <div class="flex justify-center items-center space-x-2 pt-4 overflow-x-auto">
     <div>
       <VolumeButton
         audioVolume={audioVolume}
         audioPlaying={audioPlaying}
       ></VolumeButton>
     </div>
-    <div class="flex items-center space-x-2 overflow-y-auto">
+    <div class="flex items-center space-x-2">
       <Button
         disabled={modelLoading}
         class="{$audioPlaying.fireplace ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.fireplace ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
