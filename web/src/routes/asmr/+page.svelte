@@ -380,117 +380,117 @@
     }
 </script>
 
-<div class="flex">
-  <div style="width: 100vw; height: 75vh;" bind:this={container}>
+<div class="flex flex-col justify-center items-center space-y-2 pt-4">
+  <div style="width: 100vw; height: 80vh;" bind:this={container}>
     {#if loading}
       <div class="flex justify-center items-center h-full">
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     {/if}
   </div>
-</div>
-<div class="flex justify-center items-center space-x-2 pt-4">
-  <div>
-    <VolumeButton
-      audioVolume={audioVolume}
-      audioPlaying={audioPlaying}
-    ></VolumeButton>
-  </div>
-  <div class="flex items-center space-x-2 overflow-y-auto">
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.fireplace ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.fireplace ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => {
-        await toggleModel(
-          'fireplace',
-          $audioVolume.fireplace,
+  <div class="flex justify-center items-center space-x-2 pt-4">
+    <div>
+      <VolumeButton
+        audioVolume={audioVolume}
+        audioPlaying={audioPlaying}
+      ></VolumeButton>
+    </div>
+    <div class="flex items-center space-x-2 overflow-y-auto">
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.fireplace ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.fireplace ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => {
+          await toggleModel(
+            'fireplace',
+            $audioVolume.fireplace,
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0.5, 0.5, 0.5),
+            undefined,
+            gui,
+          )
+        }
+
+      }>{emojis.fireplace}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.bird ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.bird ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'bird',
+          $audioVolume.bird,
           new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0.5, 0.5, 0.5),
+          new THREE.Vector3(1, 1, 1),
           undefined,
           gui,
-        )
-      }
-
-    }>{emojis.fireplace}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.bird ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.bird ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => await toggleModel(
-        'bird',
-        $audioVolume.bird,
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(1, 1, 1),
-        undefined,
-        gui,
-      )}
-    >{emojis.bird}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.rain ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.rain ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => await toggleModel(
-        'rain',
-        $audioVolume.rain,
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0.3, 0.3, 0.3),
-        undefined,
-        gui,
-      )}
-    >{emojis.rain}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.keyboard ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.keyboard ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => await toggleModel(
-        'keyboard', 
-        $audioVolume.keyboard,
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0.02, 0.02, 0.02),
-        new THREE.Euler(0.5, 0.05, 0.05),
-        gui,
-      )}
-    >{emojis.keyboard}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.footsteps ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.footsteps ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => await toggleModel(
-        'footsteps',
-        $audioVolume.footsteps,
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0.04, 0.04, 0.04),
-        new THREE.Euler(0.5, 0.05, 0.05),
-        gui,
-      )}
-    >{emojis.footsteps}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.phone ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.phone ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => await toggleModel(
-        'phone',
-        $audioVolume.phone,
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(3, 3, 3),
-        new THREE.Euler(0.5, 0.05, 0.05),
-        gui,
-      )}
-    >{emojis.phone}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.beach ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.beach ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={async () => await toggleModel(
-        'beach',
-        $audioVolume.beach,
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0.02, 0.02, 0.02),
-        new THREE.Euler(0, 0, 0),
-        gui,
-      )}
-    >{emojis.beach}</Button>
-    <Button
-      disabled={modelLoading}
-      class="{$audioPlaying.piano ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.piano ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
-      on:click={() => {activateSoundCloud()}}
-    >{emojis.piano}</Button>
-    {#if soundCloudActive}
-      <BottomDrawer buttonText={emojis.sound}/>
-    {/if}
+        )}
+      >{emojis.bird}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.rain ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.rain ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'rain',
+          $audioVolume.rain,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.3, 0.3, 0.3),
+          undefined,
+          gui,
+        )}
+      >{emojis.rain}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.keyboard ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.keyboard ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'keyboard', 
+          $audioVolume.keyboard,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.02, 0.02, 0.02),
+          new THREE.Euler(0.5, 0.05, 0.05),
+          gui,
+        )}
+      >{emojis.keyboard}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.footsteps ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.footsteps ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'footsteps',
+          $audioVolume.footsteps,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.04, 0.04, 0.04),
+          new THREE.Euler(0.5, 0.05, 0.05),
+          gui,
+        )}
+      >{emojis.footsteps}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.phone ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.phone ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'phone',
+          $audioVolume.phone,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(3, 3, 3),
+          new THREE.Euler(0.5, 0.05, 0.05),
+          gui,
+        )}
+      >{emojis.phone}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.beach ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.beach ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'beach',
+          $audioVolume.beach,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.02, 0.02, 0.02),
+          new THREE.Euler(0, 0, 0),
+          gui,
+        )}
+      >{emojis.beach}</Button>
+      <Button
+        disabled={modelLoading}
+        class="{$audioPlaying.piano ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.piano ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={() => {activateSoundCloud()}}
+      >{emojis.piano}</Button>
+      {#if soundCloudActive}
+        <BottomDrawer buttonText={emojis.sound}/>
+      {/if}
+    </div>
   </div>
 </div>
