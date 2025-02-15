@@ -488,6 +488,18 @@
       >{emojis.beach}</Button>
       <Button
         disabled={modelLoading}
+        class="{$audioPlaying.window ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.window ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'window',
+          $audioVolume.window,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(2, 2, 2),
+          new THREE.Euler(0, 0, 0),
+          gui,
+        )}
+      >{emojis.window}</Button>
+      <Button
+        disabled={modelLoading}
         class="{$audioPlaying.piano ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.piano ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
         on:click={() => {activateSoundCloud()}}
       >{emojis.piano}</Button>
