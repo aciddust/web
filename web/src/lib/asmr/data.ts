@@ -1,6 +1,11 @@
 import { type GLTF } from 'three/examples/jsm/Addons.js';
 import { writable } from 'svelte/store';
-import type { Writable } from 'svelte/store';
+
+export const playList: { [key: string]: string } = {
+  knightVibes: '751456812',
+  fusionJazzA: '1425775846',
+  fusionJazzB: '1598586538',
+}
 
 export const emojis: { [key: string]: string } = {
   // asmr

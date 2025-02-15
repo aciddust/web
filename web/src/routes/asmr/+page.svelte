@@ -17,6 +17,7 @@
     modelLoaded,
     gltfCache,
     emojis,
+    playList,
   } from '$lib/asmr/data';
   import {
     Button,
@@ -42,6 +43,11 @@
   let soundCloudWidgetIframe: HTMLIFrameElement | null;
   let feedbackDialogOpen: Writable<boolean> = writable(false);
 
+  function pickOneFromPlaylist() {
+    const keys = Object.keys(playList);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    return playList[randomKey];
+  }
 
   function updateAudioVolume(modelType: string, newVolume: number) {
     const object = scene.getObjectByName(String(modelType));
@@ -534,7 +540,7 @@
         on:click={() => {activateSoundCloud()}}
       >{emojis.piano}</Button>
       {#if soundCloudActive}
-        <BottomDrawer buttonText={emojis.sound}/>
+        <BottomDrawer buttonText={emojis.sound} playListKey={pickOneFromPlaylist()}/>
       {/if}
       <Button
         on:click={() => {
