@@ -173,7 +173,7 @@
     gui?: dat.GUI,
   ) {
     modelLoading = true;
-    toast.loading("Loading...");
+    toast.loading("Loading...", { duration:  1000 });
     let gltf: GLTF;
     if (gltfCache[modelType]) {
       gltf = gltfCache[modelType];
@@ -224,7 +224,7 @@
     }
     $modelLoaded[modelType] = true;
     $audioPlaying[modelType] = true;
-    toast.success("😊");
+    // toast.success("😊");
     modelLoading = false;
   }
 
