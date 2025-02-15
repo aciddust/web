@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { get } from 'svelte/store';
+  import { writable } from 'svelte/store';
+  import type { Writable } from 'svelte/store';
   import { toast } from 'svelte-sonner';
   import * as dat from 'lil-gui'
   import * as THREE from 'three';
@@ -17,9 +18,13 @@
     gltfCache,
     emojis,
   } from '$lib/asmr/data';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import BottomDrawer from './soundButton.svelte';
+  import {
+    Button,
+    buttonVariants
+  } from "$lib/components/ui/button/index.js";
+  import BottomDrawer from './soundButton.svelte';
   import VolumeButton from './volumeButton.svelte';
+  import FeedbackDialog from './feedbackDialog.svelte';
 
   let scene: THREE.Scene;
   let container: HTMLDivElement;
@@ -35,6 +40,7 @@
   let modelLoading = false;
   let soundCloudActive = false;
   let soundCloudWidgetIframe: HTMLIFrameElement | null;
+  let feedbackDialogOpen: Writable<boolean> = writable(false);
 
 
   function updateAudioVolume(modelType: string, newVolume: number) {
@@ -530,6 +536,13 @@
       {#if soundCloudActive}
         <BottomDrawer buttonText={emojis.sound}/>
       {/if}
+      <Button
+        on:click={() => {
+          $feedbackDialogOpen = true;
+        }}
+        class="bg-gray-300 hover:bg-green-600"
+      >{emojis.pleaseAddMore}</Button>
+      <FeedbackDialog dialogOpen={feedbackDialogOpen}></FeedbackDialog>
     </div>
   </div>
 </div>

@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
 export const emojis: { [key: string]: string } = {
+  // asmr
   volume: '🎚️',
   bird: '🦜',
   fireplace: '🔥',
@@ -16,6 +17,9 @@ export const emojis: { [key: string]: string } = {
   window: '🪟',
   temple: '🧘',
   sizzling: '🍳',
+
+  // management
+  pleaseAddMore: '➕',
 }
 
 export const audio: { [key: string]: string } = {
