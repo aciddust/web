@@ -380,9 +380,9 @@
     }
 </script>
 
-<div class="overflow-y-auto">
-  <div class="flex flex-col justify-center items-center space-y-2 pt-4">
-    <div style="width: 100vw; height: 80vh;" bind:this={container}>
+<div class="flex flex-col">
+  <div class="flex flex-col justify-center items-center space-y-2">
+    <div style="width: 100vw; height: 70vh;" bind:this={container}>
       {#if loading}
         <div class="flex justify-center items-center h-full">
           <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
