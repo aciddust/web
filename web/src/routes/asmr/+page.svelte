@@ -380,7 +380,7 @@
     }
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col justify-start">
   <div class="flex flex-col justify-center items-center space-y-2">
     <div style="width: 100vw; height: 70vh;" bind:this={container}>
       {#if loading}
