@@ -380,7 +380,7 @@
     }
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col items-center">
   <div class="flex flex-col justify-center items-center space-y-2">
     <div style="width: 100vw; height: 70vh;" bind:this={container}>
       {#if loading}
@@ -390,7 +390,8 @@
       {/if}
     </div>
   </div>
-  <div class="flex justify-center items-center space-x-2 pt-4 overflow-x-auto">
+  <!-- 버튼 영역 -->
+  <div class="flex space-x-2 pt-4 pb-4 overflow-x-auto">
     <div>
       <VolumeButton
         audioVolume={audioVolume}
