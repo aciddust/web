@@ -512,6 +512,18 @@
       >{emojis.temple}</Button>
       <Button
         disabled={modelLoading}
+        class="{$audioPlaying.sizzling ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.sizzling ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
+        on:click={async () => await toggleModel(
+          'sizzling',
+          $audioVolume.sizzling,
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(6, 6, 6),
+          new THREE.Euler(0, Math.PI / 2, 0),
+          gui,
+        )}
+      >{emojis.sizzling}</Button>
+      <Button
+        disabled={modelLoading}
         class="{$audioPlaying.piano ? 'bg-green-500' : 'bg-gray-300'} {$audioPlaying.piano ? 'hover:bg-yellow-600' : 'hover:bg-green-600'}"
         on:click={() => {activateSoundCloud()}}
       >{emojis.piano}</Button>

@@ -15,6 +15,7 @@ export const emojis: { [key: string]: string } = {
   sound: '🎵',
   window: '🪟',
   temple: '🧘',
+  sizzling: '🍳',
 }
 
 export const audio: { [key: string]: string } = {
@@ -27,7 +28,8 @@ export const audio: { [key: string]: string } = {
   piano: '/asmr/sounds/piano-1.mp3',
   beach: '/asmr/sounds/ocean-waves.mp3',
   window: '/asmr/sounds/wind.mp3',
-  temple: '/asmr/sounds/temple-chime.mp3'
+  temple: '/asmr/sounds/temple-chime.mp3',
+  sizzling: '/asmr/sounds/sizzling.mp3',
 };
 
 export const audioVolumeDefault: { [key: string]: number } = {
@@ -41,6 +43,7 @@ export const audioVolumeDefault: { [key: string]: number } = {
   piano: 30, // FIXME: scloud, not threejs
   window: 2.6,
   temple: 1.2,
+  sizzling: 1.8,
 };
 
 export const audioPlaying = writable<{ [key: string]: boolean }>({
@@ -54,6 +57,7 @@ export const audioPlaying = writable<{ [key: string]: boolean }>({
   beach: false,
   window: false,
   temple: false,
+  sizzling: false,
 });
 export const audioVolume = writable<{ [key: string]: number }>({
   bird: audioVolumeDefault.bird,
@@ -66,6 +70,7 @@ export const audioVolume = writable<{ [key: string]: number }>({
   beach: audioVolumeDefault.beach,
   window: audioVolumeDefault.window,
   temple: audioVolumeDefault.temple,
+  sizzling: audioVolumeDefault.sizzling,
 });
 
 export const modelPath: { [key: string]: string } = {
@@ -82,6 +87,7 @@ export const modelPath: { [key: string]: string } = {
   beach: '/asmr/models/palm_tree.glb',
   window: '/asmr/models/window.glb',
   temple: '/asmr/models/chime.glb',
+  sizzling: '/asmr/models/frypan.glb',
 };
 
 export const modelLoaded = writable<{ [key: string]: boolean }>({
@@ -98,6 +104,7 @@ export const modelLoaded = writable<{ [key: string]: boolean }>({
   beach: false,
   window: false,
   temple: false,
+  sizzling: false,
 });
 
 export const gltfCache: { [key: string]: GLTF } = {};
