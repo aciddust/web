@@ -82,7 +82,34 @@
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
-	<Menubar.Menu> <!--2-->
+	<!-- <Menubar.Menu>
+		<Menubar.Trigger>Blog</Menubar.Trigger>
+		<Menubar.Content>
+			<Menubar.Item on:click={() => routeToPage('blog')}>
+				Posts
+			</Menubar.Item>
+		</Menubar.Content>
+	</Menubar.Menu> -->
+	<!-- <Menubar.Menu>
+		<Menubar.Trigger>Service</Menubar.Trigger>
+		<Menubar.Content>
+			<Menubar.Item on:click={() => routeToPage('school/schedule')}>
+				School Schedule
+			</Menubar.Item>
+		</Menubar.Content>
+	</Menubar.Menu> -->
+	<!-- <Menubar.Menu>
+		<Menubar.Trigger>Blog</Menubar.Trigger>
+		<Menubar.Content>
+			<Menubar.Item on:click={() => routeToPage('blog')}>
+				Posts
+			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('blog/about')}>
+				About
+			</Menubar.Item>
+		</Menubar.Content>
+	</Menubar.Menu> -->
+	<Menubar.Menu> <!--3-->
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
 			<!-- <Menubar.Item on:click={() => toast.info('Work in progress')}>
