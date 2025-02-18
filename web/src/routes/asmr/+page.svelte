@@ -374,7 +374,9 @@
       // 오디오 재생상태 비활성화
       audioPlayingFalseAll();
       // 디버거 제거
-      gui.destroy();
+      if (gui && import.meta.env.MODE === 'development') {
+        gui.destroy()
+      }
       container.removeChild(renderer.domElement);
     };
   });
