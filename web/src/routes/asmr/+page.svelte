@@ -99,6 +99,9 @@
 
   // 리사이즈 핸들러
   function handleResize() {
+    if (!container) {
+      return;
+    }
     const width = container.clientWidth;
     const height = container.clientHeight;
     camera.aspect = width / height;
