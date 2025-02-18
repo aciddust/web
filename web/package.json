@@ -23,6 +23,7 @@
 		"@tailwindcss/forms": "^0.5.10",
 		"@tailwindcss/typography": "^0.5.16",
 		"@types/diff-match-patch": "^1.0.36",
+		"@types/lodash": "^4.17.15",
 		"@types/node": "^22.13.4",
 		"@types/nodemailer": "^6.4.17",
 		"@types/three": "^0.173.0",
@@ -57,10 +58,14 @@
 		"diff-match-patch": "^1.0.5",
 		"highlight.js": "^11.11.1",
 		"lil-gui": "^0.20.0",
+		"lodash": "^4.17.21",
 		"marked": "^15.0.7",
 		"nodemailer": "^6.10.0",
 		"pyodide": "^0.27.2",
 		"sql-formatter": "^15.4.10",
-		"three": "^0.173.0"
+		"sqlite": "^5.1.1",
+		"sqlite3": "^5.1.7",
+		"three": "^0.173.0",
+		"xml2js": "^0.6.2"
 	}
 }
