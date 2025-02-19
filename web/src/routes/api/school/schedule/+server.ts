@@ -8,15 +8,15 @@ export async function GET({ fetch, url }) {
   const nowYear = new Date().getFullYear();
   const nextYear = nowYear + 1;
 
-  const queries = {
+  const queries: Record<string, string> = {
     "Type": "json",
-    "pIndex": 1,
-    "pSize": 1000,
+    "pIndex": "1",
+    "pSize": "1000",
     "KEY": NEIS_API_KEY,
-    "ATPT_OFCDC_SC_CODE": districtCode,
-    "SD_SCHUL_CODE": standardCode,
-    "AA_FROM_YMD": nowYear,
-    "AA_TO_YMD": nextYear,
+    "ATPT_OFCDC_SC_CODE": districtCode ?? "",
+    "SD_SCHUL_CODE": standardCode ?? "",
+    "AA_FROM_YMD": nowYear.toString(),
+    "AA_TO_YMD": nextYear.toString(),
   };
 
   const NEIS_ENDPOINT = "https://open.neis.go.kr/hub/SchoolSchedule"
