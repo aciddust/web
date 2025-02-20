@@ -110,6 +110,14 @@
 		</Menubar.Content>
 	</Menubar.Menu> -->
 	<Menubar.Menu> <!--3-->
+		<Menubar.Trigger>Services</Menubar.Trigger>
+		<Menubar.Content>
+			<Menubar.Item on:click={() => routeToPage('school/schedule/중학교')}>
+				Arcadia: Beta
+			</Menubar.Item>
+		</Menubar.Content>
+	</Menubar.Menu>
+	<Menubar.Menu> <!--4-->
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
 			<!-- <Menubar.Item on:click={() => toast.info('Work in progress')}>
