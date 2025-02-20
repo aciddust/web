@@ -1,6 +1,7 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
   import Button from '$lib/components/ui/button/button.svelte';
+  import { toast } from 'svelte-sonner';
   import {
     type ISchoolDistrict,
     type ISchoolInfoByChosung,
@@ -64,12 +65,12 @@
       // 5페이지 초과시 현재 페이지 중심으로 표시
       let start = Math.max(1, currentPage - 2);
       let end = Math.min(totalPages, start + 4);
-      
+
       // end가 totalPages에 도달하지 못한 경우 start를 조정
       if (end - start < 4) {
         start = Math.max(1, end - 4);
       }
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
@@ -138,14 +139,17 @@
   const toggleSchoolSelection = (school: ISchoolInfo) => {
     selectedSchoolList.update(schoolList => {
       if (schoolList.includes(school)) {
+        toast.info('학교 선택 해제됨');
         return schoolList.filter(item => item !== school);
       } else {
         try {
           fetchSchoolSchedule(school);
           school.colorCode = '#' + Math.floor(Math.random() * 16777215).toString(16);
+          toast.success('학교 추가됨');
           return [...schoolList, school];
         } catch (error) {
           console.error(error);
+          toast.error('일정 불러오기에 실패했습니다.');
           return schoolList;
         }
       }
