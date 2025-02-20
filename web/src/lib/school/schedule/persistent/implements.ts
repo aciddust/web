@@ -8,12 +8,25 @@ import { getChosung } from "$lib/school/schedule/utils";
 import _ from 'lodash'
 
 export const getSchoolInfoByChosung = _.memoize(
-  async (schoolType: string, districtCode: string): Promise<ISchoolInfoByChosung> => {
-    console.log(`getSchoolInfoByChosung: called!! -> ${schoolType} ${districtCode}`)
+  async (
+    schoolType: string,
+    districtCode: string,
+    schoolName: string | null | undefined
+  ): Promise<ISchoolInfoByChosung> => {
+    console.log(`getSchoolInfoByChosung: called!! -> ${schoolType} ${districtCode} ${schoolName || ''}`)
     const db = await getDB();
-    const schoolInfoList = await db.all<ISchoolInfo[]>(
-      "SELECT district_code, standard_code, school_name FROM school_info WHERE school_type like ? AND district_code = ?", [schoolType, districtCode]
-    );
+
+    // 기본 쿼리와 파라미터 설정
+    let query = "SELECT district_code, standard_code, school_name FROM school_info WHERE school_type like ? AND district_code = ?";
+    let params = [schoolType, districtCode];
+
+    // schoolName이 존재하는 경우 쿼리와 파라미터에 추가
+    if (schoolName) {
+      query += " AND school_name like ?";
+      params.push(`%${schoolName}%`);
+    }
+
+    const schoolInfoList = await db.all<ISchoolInfo[]>(query, params);
     await db.close();
     const schoolInfoByChosung: ISchoolInfoByChosung = {};
     for (const schoolInfo of schoolInfoList) {
@@ -30,7 +43,7 @@ export const getSchoolInfoByChosung = _.memoize(
     return schoolInfoByChosung;
   },
   // custom resolver
-  (schoolType, districtCode) => `${schoolType}-${districtCode}`
+  (schoolType, districtCode, schoolName) => `${schoolType}-${districtCode}-${schoolName || ''}`
 )
 
 

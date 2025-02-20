@@ -17,6 +17,9 @@ export const getClassifiedSchoolMap = (schoolList: ISchoolInfo[]): Map<string, I
   // 첫글자 ㄱ, ㄴ, ㄷ, ㄹ, ㅁ, ㅂ, ㅅ, ㅇ, ㅈ, ㅊ, ㅋ, ㅌ, ㅍ, ㅎ 순서대로 분류된 Map을 만들어서 반환
   const schoolMap = new Map<string, ISchoolInfo[]>()
   schoolList.forEach((school) => {
+    if (!school.school_name) {
+      return
+    }
     const initial = school.school_name[0]
     const chosung = getChosung(initial)
     // console.debug("chosung -> ", initial, chosung)

@@ -1,29 +1,39 @@
 <script lang="ts">
-  import { page } from '$app/state';
   import { slide } from 'svelte/transition';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { type ISchoolDistrict, type ISchoolInfoByChosung, type ISchoolInfo } from '$lib/school/schedule/interfaces';
-  import { selectedRegion, selectedChosung } from '$lib/school/schedule/store';
+  import {
+    type ISchoolDistrict,
+    type ISchoolInfoByChosung,
+    type ISchoolInfo,
+    type ISchedule
+  } from '$lib/school/schedule/interfaces';
+  import {
+    selectedChosung,
+    selectedSchoolList,
+    currentRegionCode,
+    currentRegionName,
+    currentPage,
+    searchKeyword,
+    itemsPerPage,
+    YYYYMMScheduleByStandardCode,
+    scheduleByYYYYMM,
+    hideSaturdayOff,
+  } from '$lib/school/schedule/store';
   import { writable, type Writable } from 'svelte/store';
   import { onMount } from 'svelte';
+	import Calendar from './calendar.svelte';
+	import Input from '$lib/components/ui/input/input.svelte';
+
 
   export let data;
   const districtList: ISchoolDistrict[] = data.props.districtList;
   const schoolType: string = data.props.schoolType;
   let schoolInfoByChosung: Writable<ISchoolInfoByChosung> = writable({});
   let regionAreaExpanded: boolean = true;
-  const currentRegionCode = writable('');
-  const currentRegionName = writable('');
-  const searchKeyword = writable('');
-  const currentPage = writable(1);
-  const itemsPerPage = writable(10);
 
-  const selectedSchoolList = writable<ISchoolInfo[]>([]);
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1;
-
-  const fetchChosungClassifiedSchoolInfoByRegion = async (district: ISchoolDistrict) => {
-    await fetch(`/api/school/${schoolType}/${district.district_code}`)
+  const fetchChosungClassifiedSchoolInfoByRegion = async (district: ISchoolDistrict, name: string | null | undefined) => {
+    const query = name ? `?name=${encodeURIComponent(name)}` : '';
+    await fetch(`/api/school/${schoolType}/${district.district_code}${query}`)
       .then(res => res.json())
       .then(data => {
         $schoolInfoByChosung = data.schoolInfoByChosung;
@@ -34,8 +44,8 @@
   }
 
   const chooseRegion = async (district: ISchoolDistrict) => {
-    selectedRegion.set(district.district_code);
-    await fetchChosungClassifiedSchoolInfoByRegion(district);
+    currentRegionCode.set(district.district_code);
+    await fetchChosungClassifiedSchoolInfoByRegion(district, null);
     selectedChosung.set('ㄱ');
     currentPage.set(1);
   }
@@ -68,14 +78,94 @@
     return pages;
   }
 
+  const fetchSchoolSchedule = async (school: ISchoolInfo) => {
+    const response = await fetch(`/api/school/schedule?s=${school.standard_code}&d=${school.district_code}`);
+    const data = await response.json();
+
+    // 일정 데이터를 YYYYMM 기준으로 그룹화
+    const schedulesByMonth = new Map<string, ISchedule[]>();
+
+    data.schedules.forEach((schedule: ISchedule) => {
+      const dateStr = Array.isArray(schedule.AA_YMD) ? schedule.AA_YMD[0] : schedule.AA_YMD;
+      const yyyymm = dateStr.substring(0, 6);
+      if (!schedulesByMonth.has(yyyymm)) {
+        schedulesByMonth.set(yyyymm, []);
+      }
+      schedulesByMonth.get(yyyymm)?.push(schedule);
+    });
+
+    // YYYYMM별 일정 저장
+    scheduleByYYYYMM.update(currentMap => {
+      schedulesByMonth.forEach((schedules, yyyymm) => {
+        if (!currentMap.has(yyyymm)) {
+          currentMap.set(yyyymm, []);
+        }
+        currentMap.get(yyyymm)?.push(...schedules);
+      });
+      return currentMap;
+    });
+
+    // 학교별 YYYYMM 일정 저장
+    YYYYMMScheduleByStandardCode.update(currentMap => {
+      const key = school.standard_code!;
+      if (!currentMap.has(key)) {
+        currentMap.set(key, []);
+      }
+      currentMap.get(key)?.push(...data.schedules);
+      return currentMap;
+    });
+  };
+
+  // 특정 월의 모든 일정 조회
+  const getMonthSchedules = (yyyymm: string) => {
+    return $scheduleByYYYYMM.get(yyyymm) || [];
+  };
+
+  // 특정 학교의 모든 일정 조회
+  const getSchoolSchedules = (standardCode: string) => {
+    return $YYYYMMScheduleByStandardCode.get(standardCode) || [];
+  };
+
+  // 특정 날짜의 모든 일정 조회
+  const getDaySchedules = (yyyymmdd: string) => {
+    const yyyymm = yyyymmdd.substring(0, 6);
+    return getMonthSchedules(yyyymm).filter(schedule => {
+      const dateStr = Array.isArray(schedule.AA_YMD) ? schedule.AA_YMD[0] : schedule.AA_YMD;
+      return dateStr === yyyymmdd;
+    });
+  };
+
   const toggleSchoolSelection = (school: ISchoolInfo) => {
     selectedSchoolList.update(schoolList => {
       if (schoolList.includes(school)) {
         return schoolList.filter(item => item !== school);
       } else {
-        return [...schoolList, school];
+        try {
+          fetchSchoolSchedule(school);
+          school.colorCode = '#' + Math.floor(Math.random() * 16777215).toString(16);
+          return [...schoolList, school];
+        } catch (error) {
+          console.error(error);
+          return schoolList;
+        }
       }
     });
+  };
+
+  let searchDisabled = false;
+
+  const executeSearch = () => {
+    if (searchDisabled) return;
+    searchDisabled = true;
+    currentPage.set(1);
+    const district = districtList.find(d => d.district_code === $currentRegionCode);
+    if (district) {
+      fetchChosungClassifiedSchoolInfoByRegion(district, $searchKeyword);
+    }
+    // Re-enable search after 1 second to prevent too many enter presses
+    setTimeout(() => {
+      searchDisabled = false;
+    }, 1000);
   };
 
   onMount(async () => {});
@@ -90,8 +180,8 @@
     currentPage.set(1);
   }
 
-  $: totalPages = $schoolInfoByChosung[$selectedChosung] 
-    ? Math.ceil($schoolInfoByChosung[$selectedChosung].length / $itemsPerPage) 
+  $: totalPages = $schoolInfoByChosung[$selectedChosung]
+    ? Math.ceil($schoolInfoByChosung[$selectedChosung].length / $itemsPerPage)
     : 0;
 
   const handlePageChange = (pageNum: number) => {
@@ -99,7 +189,7 @@
   };
 </script>
 
-<div class="flex flex-col mx-auto space-y-4">
+<div class="flex flex-col mx-auto space-y-4 p-4 max-w-6xl pb-safe">
   {#if regionAreaExpanded}
   <div
     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2"
@@ -108,8 +198,8 @@
   >
     {#each districtList as district}
       <Button
-        variant={$selectedRegion === district.district_code ? 'default' : 'outline'}
-        class="w-full min-w-[120px] px-4 {$selectedRegion === district.district_code ? 'bg-primary text-primary-foreground' : ''}"
+        variant={$currentRegionCode === district.district_code ? 'default' : 'outline'}
+        class="w-full min-w-[120px] px-4 {$currentRegionCode === district.district_code ? 'bg-primary text-primary-foreground' : ''}"
         on:click={() => chooseRegion(district)}
       >
         <span class="truncate">
@@ -178,6 +268,33 @@
       {/each}
     {/if}
   </div>
+
+  <!-- 여기 검색필드+버튼을 생성할것 -->
+  {#if $currentRegionCode !== ''}
+  <div class="flex justify-center items-center gap-2">
+    <Input
+      type="text"
+      class="w-full p-2 border border-gray-300 rounded-md"
+      placeholder="학교명 검색"
+      bind:value={$searchKeyword}
+      on:keydown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executeSearch();
+        }
+      }}
+    />
+    <Button
+      variant="outline"
+      size="sm"
+      on:click={executeSearch}
+      disabled={searchDisabled}
+    >
+      검색
+    </Button>
+  </div>
+  {/if}
+
 
   {#if totalPages > 0}
   <div class="flex justify-center items-center gap-2 py-4">
@@ -249,6 +366,57 @@
     </Button>
   </div>
   {/if}
+  <div class="flex item-center vertical-center justify-center space-x-2">
+    <Button
+      variant={$hideSaturdayOff ? 'default' : 'outline'}
+      size="sm"
+      on:click={() => hideSaturdayOff.update(v => !v)}
+    >
+      { $hideSaturdayOff ? '토요일 휴무 표시' : '토요일 휴무 숨기기' }
+    </Button>
+    <Button
+    variant="outline"
+    size="sm"
+    on:click={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+    >
+    맨 밑으로
+  </Button>
+  <Button
+    variant="outline"
+    size="sm"
+    on:click={() => selectedSchoolList.set([])}
+  >
+    학교 선택 해제
+  </Button>
+  </div>
+  <Calendar />
+  <div>
+    <!-- 선택된 학교 목록을 나열하기위한 카드 출력 -->
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+      {#each $selectedSchoolList as school}
+        <Button
+          variant="outline"
+          size="sm"
+          class="h-12 p-2 hover:scale-[1.02] transition-transform"
+          on:click={() => toggleSchoolSelection(school)}
+        >
+          <div class="flex space-x-2 items-center vertical-center">
+            <span style="color: {school.colorCode}">●</span>
+            <span class="text-xs font-medium truncate"> {school.school_name} </span>
+          </div>
+        </Button>
+      {/each}
+    </div>
+  </div>
+  <div class="flex item-center vertical-center justify-center space-x-2">
+    <Button
+      variant="outline"
+      size="sm"
+      on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+    >
+      맨 위로
+    </Button>
+  </div>
 </div>
 
 
@@ -287,5 +455,11 @@
   .school-card.selected {
     @apply bg-primary/10 border-primary;
     border-width: 1px;
+  }
+  /* iOS 안전 영역 대응 */
+  @supports (-webkit-touch-callout: none) {
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
   }
 </style>
