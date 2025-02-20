@@ -27,8 +27,7 @@ const __dirname = new URL('.', import.meta.url).pathname;
 
 export async function getDB() {
   commandLsCurrentDir();
-  const dbPath: string = "storage/school.sqlite";
-
+  const dbPath: string = ".svelte-kit/output/server/storage/school.sqlite";
   return open({
     filename: dbPath,
     driver: sqlite3.Database,
