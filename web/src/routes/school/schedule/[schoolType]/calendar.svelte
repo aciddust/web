@@ -5,7 +5,6 @@
     YYYYMMScheduleByStandardCode,
     hideSaturdayOff,
   } from '$lib/school/schedule/store';
-  import { Label } from "$lib/components/ui/label/index.js";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
 
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -17,12 +16,17 @@
   let showDialog = false;
   let selectedDate: string = '';
   let selectedSchedules: Array<{ schoolName: string; colorCode: string; content: string }> = [];
+  let isNoSchedule: boolean[] = []
 
   daysInMonth = new Date($date.getFullYear(), $date.getMonth() + 1, 0).getDate();
   dayOfWeek = new Date($date.getFullYear(), $date.getMonth(), 1).getDay();
 
   const prevMonth = () => {
     const newDate = new Date($date);
+    if (newDate.getMonth() === 0) {
+      // 1월 이전, 작년으로 넘어갈 수 없도록 예외처리
+      return;
+    }
     newDate.setMonth(newDate.getMonth() - 1);
     date.set(newDate);
 
@@ -33,6 +37,10 @@
 
   const nextMonth = () => {
     const newDate = new Date($date);
+    if (newDate.getMonth() === 11) {
+      // 12월 이후, 내년으로 넘어갈 수 없도록 예외처리
+      return;
+    }
     newDate.setMonth(newDate.getMonth() + 1);
     date.set(newDate);
 
@@ -84,7 +92,6 @@
     const month = ($date.getMonth() + 1).toString().padStart(2, '0');
     const dayStr = day.toString().padStart(2, '0');
     const yyyymmdd = `${year}${month}${dayStr}`;
-    const yyyymm = yyyymmdd.substring(0, 6);
 
     const schedules: Array<{ schoolName: string; colorCode: string; content: string }> = [];
 
@@ -112,6 +119,9 @@
       }
     });
 
+    if (schedules.length === 0) {
+      isNoSchedule.push(true);
+    }
     return schedules;
   };
 
@@ -131,7 +141,7 @@
 {#if $selectedSchoolList.length > 0}
 <div>
   <div class="flex justify-center p-3 justify-between">
-    <Button variant="outline" id="prev-button" on:click={() => prevMonth()}>←</Button>
+    <Button variant="outline" id="prev-button" on:click={() => prevMonth()} disabled={$date.getMonth() === 0}>←</Button>
     <div class="flex flex-col">
       <button
         id="year-month"
@@ -142,7 +152,7 @@
       <div id='year-month-picker'>
       </div>
     </div>
-    <Button variant="outline" id="next-button" on:click={() => nextMonth()}>→</Button>
+    <Button variant="outline" id="next-button" on:click={() => nextMonth()} disabled={$date.getMonth() === 11}>→</Button>
   </div>
   <div class="flex justify-center pb-3">
     <Button variant="outline" class="font-black" on:click={() => resetMonth()}>↻</Button>
