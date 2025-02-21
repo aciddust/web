@@ -132,9 +132,43 @@
 </script>
 
 <div class="flex flex-col items-center justify-center container pb-safe p-4">
-  <div style="overflow-x: scroll; position: relative; width: 100%; height: 350px;">
+  <div class="map-container outline-scroll" style="overflow-x: scroll; position: relative; width: 100%; height: 400px;">
     <div id="map" style={mapStyle}></div>
   </div>
+  <style>
+    /* Outline variant scrollbar styles */
+    .outline-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+    .outline-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .outline-scroll::-webkit-scrollbar-thumb {
+      background-color: #cbd5e0;
+      border: 2px solid #edf2f7;
+      border-radius: 4px;
+    }
+    /* Firefox */
+    .outline-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e0 #edf2f7;
+    }
+  </style>
+
+  <style>
+    @media (min-width: 768px) {
+      .map-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 767px) {
+      .map-container {
+        display: block;
+      }
+    }
+  </style>
 
   <div class="flex flex-col items-center justify-center w-full container">
     <div class="w-full max-w-full">
