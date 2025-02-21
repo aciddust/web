@@ -10,7 +10,10 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"typeRoots": ["node_modules/@types", "./src/global.d.ts"],
+		"typeRoots": [
+			"node_modules/@types",
+			"./src/app.d.ts"
+		],
 	}
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
