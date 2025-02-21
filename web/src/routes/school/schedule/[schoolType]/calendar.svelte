@@ -212,11 +212,11 @@
 
 <!-- 일정 상세 다이얼로그 -->
 <Dialog.Root bind:open={showDialog}>
-  <Dialog.Content class="max-w-md">
+  <Dialog.Content class="max-w-md max-h-[80vh] flex flex-col">
     <Dialog.Header>
       <Dialog.Title>{selectedDate}</Dialog.Title>
     </Dialog.Header>
-    <div class="py-4">
+    <div class="py-4 flex-1 overflow-y-auto">
       {#if selectedSchedules.length === 0}
         <p class="text-center text-gray-500">등록된 일정이 없습니다.</p>
       {:else}
