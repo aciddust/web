@@ -43,9 +43,6 @@
 			<Menubar.Item on:click={() => routeToPage('hmac')}>
 				HMAC
 			</Menubar.Item>
-			<!-- <Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
-				Korean Map Extractor
-			</Menubar.Item> -->
       <Menubar.Separator />
       <Menubar.Item on:click={async () => {
 				// press esc key to close the menu
@@ -62,7 +59,6 @@
 				Print
 				<Menubar.Shortcut>⌘P</Menubar.Shortcut>
 			</Menubar.Item>
-			<!-- <Menubar.Item>Save as PDF</Menubar.Item> -->
     </Menubar.Content>
   </Menubar.Menu>
 	<Menubar.Menu> <!--1-->
@@ -82,38 +78,14 @@
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
-	<!-- <Menubar.Menu>
-		<Menubar.Trigger>Blog</Menubar.Trigger>
-		<Menubar.Content>
-			<Menubar.Item on:click={() => routeToPage('blog')}>
-				Posts
-			</Menubar.Item>
-		</Menubar.Content>
-	</Menubar.Menu> -->
-	<!-- <Menubar.Menu>
-		<Menubar.Trigger>Service</Menubar.Trigger>
-		<Menubar.Content>
-			<Menubar.Item on:click={() => routeToPage('school/schedule')}>
-				School Schedule
-			</Menubar.Item>
-		</Menubar.Content>
-	</Menubar.Menu> -->
-	<!-- <Menubar.Menu>
-		<Menubar.Trigger>Blog</Menubar.Trigger>
-		<Menubar.Content>
-			<Menubar.Item on:click={() => routeToPage('blog')}>
-				Posts
-			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('blog/about')}>
-				About
-			</Menubar.Item>
-		</Menubar.Content>
-	</Menubar.Menu> -->
 	<Menubar.Menu> <!--3-->
 		<Menubar.Trigger>Services</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item on:click={() => routeToPage('school/schedule/중학교')}>
 				Arcadia: Beta
+			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
+				Map Extractor
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
