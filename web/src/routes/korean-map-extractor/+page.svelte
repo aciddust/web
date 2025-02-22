@@ -18,6 +18,8 @@
   let name = '신분당선 강남역 4번출구';
   let lastMapObject: any;
   let mapReady = false;
+  let isSearching = false;
+  let isDrawing = false;
 
   const getMapStyle = (width: number, height: number): string => {
     return `width:${width}px; height:${height}px; display: flex; align-items: center; justify-content: center;`;
@@ -107,24 +109,22 @@
     toast.success("Okay");
   }
 
-  const getLocation = async (address: string) => {
-    try {
-      const response = await fetch(`/api/korean-map-extractor/kakao?address=${address}`);
-      const { documents }: KakaoAddressResponse = await response.json();
-      if (!documents || documents.length === 0) {
-        toast.error('주소 정보를 찾지 못했습니다');
-        return;
-      }
-      const { x, y } = documents[0].address;
-      lat = parseFloat(y);
-      lng = parseFloat(x);
-      name = documents[0].address_name;
-      toast.success('위도, 경도 정보를 찾았습니다.');
-    } catch (error) {
-      console.log(error);
-      toast.error('위도, 경도 정보를 찾는 중 오류가 발생했습니다.');
+  const getLocation = async (address: string): Promise<void> => {
+    const response = await fetch(`/api/korean-map-extractor/kakao?address=${address}`);
+    const { documents }: KakaoAddressResponse = await response.json();
+
+    if (!documents || documents.length === 0) {
+      throw new Error('주소 정보를 찾지 못했습니다');
     }
-  }
+
+    const { x, y } = documents[0].address;
+    lat = parseFloat(y);
+    lng = parseFloat(x);
+    name = documents[0].address_name;
+
+    // 검색 후 자동으로 지도 그리기
+    drawMap(lat, lng, name, zoom);
+  };
 
   onMount(async () => {
     try {
@@ -206,8 +206,26 @@
           />
         <Button
           class="mt-4 w-full"
+          disabled={isSearching}
           on:click={() => {
-            getLocation(address);
+            if (!address.trim()) {
+              toast.error('주소를 입력해주세요');
+              return;
+            }
+
+            isSearching = true;
+            toast.promise(
+              getLocation(address)
+                .finally(() => {
+                  isSearching = false;
+                }),
+              {
+                loading: '주소를 검색하는 중...',
+                success: '위치를 찾았습니다',
+                error: (err: any) =>
+                  `${err.message || '주소 검색 중 오류가 발생했습니다'}`,
+              }
+            );
           }}
         >
           Search
@@ -311,7 +329,15 @@
           Download
         </Button>
       {/if}
-      <Button class="mt-4 w-full" on:click={handleDraw}>
+      <Button
+        class="mt-4 w-full"
+        disabled={isDrawing}
+        on:click={() => {
+          isDrawing = true;
+          handleDraw();
+          isDrawing = false;
+        }}
+      >
         Draw
       </Button>
     </div>
