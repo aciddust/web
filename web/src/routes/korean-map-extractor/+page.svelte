@@ -1,25 +1,17 @@
 <script lang="ts">
 
-  import { page } from '$app/state';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
   import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
-
-  // // 페이지 파라미터 직접 접근
-  // const { lat, lng } = page.params as unknown as PageParams;
-
-  // $: name = (page.url.searchParams.get('name') || '') as string;
-  // $: width = (page.url.searchParams.get('width') || 700) as string;
-  // $: height = (page.url.searchParams.get('height') || 350) as string;
-  // $: zoom = (page.url.searchParams.get('zoom') || 4) as number;
+  import type { KakaoAddressResponse } from '../api/korean-map-extractor/kakao/+server';
 
   let width = 700;
   let height = 350;
   let kakao: any;
   let mapContainer: HTMLElement;
+  let address = "강남대로 311";
   let lat = 37.4956
   let lng = 127.02905
   let zoom = 3
@@ -115,20 +107,53 @@
     toast.success("Okay");
   }
 
-  onMount(() => {
-    if (!window.kakao) {
-      return;
+  const getLocation = async (address: string) => {
+    try {
+      const response = await fetch(`/api/korean-map-extractor/kakao?address=${address}`);
+      const { documents }: KakaoAddressResponse = await response.json();
+      if (!documents || documents.length === 0) {
+        toast.error('주소 정보를 찾지 못했습니다');
+        return;
+      }
+      const { x, y } = documents[0].address;
+      lat = parseFloat(y);
+      lng = parseFloat(x);
+      name = documents[0].address_name;
+      toast.success('위도, 경도 정보를 찾았습니다.');
+    } catch (error) {
+      console.log(error);
+      toast.error('위도, 경도 정보를 찾는 중 오류가 발생했습니다.');
     }
-    const staticMapContainer  = document.getElementById('map') // 이미지 지도를 표시할 div
-    if (!staticMapContainer) {
-      return;
+  }
+
+  onMount(async () => {
+    try {
+      // kakao maps API가 로드될 때까지 대기
+      await new Promise((resolve) => {
+        const checkKakao = setInterval(() => {
+          if (window.kakao && window.kakao.maps) {
+            clearInterval(checkKakao);
+            resolve(true);
+          }
+        }, 100);
+      });
+      kakao = window.kakao;
+      const staticMapContainer = document.getElementById('map');
+      if (!staticMapContainer) {
+        throw new Error('지도 컨테이너를 찾을 수 없습니다.');
+      }
+      mapContainer = staticMapContainer;
+
+      toast.success("Ready");
+    } catch (error) {
+      console.log(error)
+      toast.error('카카오맵 초기화 중 오류가 발생했습니다.');
     }
-    kakao = window.kakao;
-    mapContainer = staticMapContainer;
-    toast.success("Ready");
   });
 
-  // $: mapStyle = getMapStyle(width, height);
+  $: {
+    drawMap(lat, lng, name, zoom);
+  }
 </script>
 
 <div class="flex flex-col items-center justify-center container pb-safe p-4">
@@ -172,6 +197,22 @@
 
   <div class="flex flex-col items-center justify-center w-full container">
     <div class="w-full max-w-full">
+      <div>
+        <Label>Address</Label>
+          <Input
+            bind:value={address}
+            placeholder="지번주소 및 도로명주소를 입력해주세요"
+            class="w-full"
+          />
+        <Button
+          class="mt-4 w-full"
+          on:click={() => {
+            getLocation(address);
+          }}
+        >
+          Search
+        </Button>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         <div>
           <Label>Name</Label>
@@ -183,6 +224,7 @@
         <div>
           <Label>Latitude</Label>
           <Input
+            step="0.0001"
             type="number"
             bind:value={lat}
             class="w-full"
@@ -202,6 +244,7 @@
         <div>
           <Label>Longitude</Label>
           <Input
+            step="0.0001"
             type="number"
             bind:value={lng}
             class="w-full"
