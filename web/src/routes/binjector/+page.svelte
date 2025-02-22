@@ -10,6 +10,8 @@
 	import { toast } from 'svelte-sonner';
 	import Input from '$lib/components/ui/input/input.svelte';
   import * as Carousel from "$lib/components/ui/carousel/index.js";
+	import Label from '$lib/components/ui/label/label.svelte';
+	import { openNewTab } from '$lib/utils';
 
 
   let pyodide: any;
@@ -28,16 +30,21 @@
   let decrypted: boolean = false;
 
   onMount(async () => {
+      let isOkay: boolean = false;
+      toast.loading('Loading...');
       try {
           pyodide = await loadPyodide({indexURL: PYODIDE_URL});
           await pyodide.loadPackage('micropip');
           const micropip = pyodide.pyimport('micropip');
           await micropip.install('binjector==0.1.10');
           loading = false;
-          toast.success('Ready!')
+          isOkay = true;
       } catch (error) {
           toast.error('Pyodide: Failed to load')
       }
+      toast.dismiss();
+      if (isOkay) toast.success('Ready!')
+      else toast.error('Failed to load binjector');
   });
 
   const encrypt = async (
@@ -160,17 +167,61 @@
       }
   };
 
-
-
 </script>
 
+<div class="space-y-4 pl-4 pr-4 items-center justify-center" style="display: flex; align-items: flex-end;">
+  <a
+    href="https://pypi.org/project/binjector/"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex items-end text-2xl font-semibold inline-block"
+  >Binjector</a>
+  <button
+    type="button"
+    class="flex items-center justify-center h-8 ml-2 p-0 border-0 bg-transparent cursor-pointer"
+    on:click={() => openNewTab('https://github.com/dev4hobby/image-steganography/tree/main/binjector')}
+    on:keydown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        openNewTab('https://github.com/dev4hobby/image-steganography/tree/main/binjector');
+      }
+    }}
+  >
+    <img src="/github-mark.svg" alt="Binjector" class="h-8" />
+  </button>
+</div>
+
 {#if loading}
-  <Skeleton class="h-4 w-1/4" />
+  <div class="flex justify-center">
+    <div class="flex flex-col space-y-4 w-1/2">
+      <!-- Header Skeleton -->
+      <div class="flex flex-col space-y-2 p-4">
+
+        <!-- Input Section Skeleton -->
+        <div class="flex flex-col space-y-2">
+          <Skeleton class="h-6 w-32" /> <!-- Section title -->
+          <div class="flex space-x-4">
+            <Skeleton class="h-64 w-full" /> <!-- Message input area -->
+            <Skeleton class="h-64 w-full" /> <!-- Image upload area -->
+          </div>
+        </div>
+
+        <!-- Output Section Skeleton -->
+        <div class="flex flex-col space-y-2">
+          <Skeleton class="h-6 w-32" /> <!-- Section title -->
+          <Skeleton class="h-64 w-full" /> <!-- Output image area -->
+        </div>
+
+        <!-- Buttons Skeleton -->
+        <div class="flex space-x-4">
+          <Skeleton class="h-10 w-full" />
+        </div>
+      </div>
+    </div>
+  </div>
 {:else}
   <div class="flex space-y-4 pl-4 pr-4 items-center justify-center">
     <Carousel.Root>
       <Carousel.Content>
-
         <Carousel.Item> <!-- page for encryption -->
           <div class="flex flex-col space-y-2 p-4">
             <h3 class="text-lg font-semibold">Encryption: Input</h3>
