@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Button from '../ui/button/button.svelte';
-
+  let isSpinning: boolean = true
   let cubeElement: HTMLPreElement;
   let width = 80;
   let height = 40;
@@ -9,7 +9,6 @@
   let angleX = 0;
   let angleY = 0;
   let angleZ = 0;
-  export let isSpinning: boolean;
   export let red = 237;
   export let green = 132;
   export let blue = 255;
@@ -241,3 +240,12 @@
   </div>
   {/if}
 </div>
+
+<Button
+	class="mt-4 outline-none"
+	variant="outline"
+	on:click={
+	() => {
+		isSpinning = !isSpinning;
+	}
+}>{isSpinning ? 'Stop' : 'Spin'} </Button>

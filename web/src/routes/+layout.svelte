@@ -8,7 +8,6 @@
 	import { DEFAULT_ROUTE, ISSUE_URL } from "$lib/constants";
 	let { children } = $props();
 
-	import { toast } from 'svelte-sonner';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit'
 
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
@@ -98,9 +97,9 @@
 			<Menubar.Item on:click={() => routeToPage('misc/feedback')}>
 				Feedback
 			</Menubar.Item>
-			<Menubar.Item on:click={() => openNewTab(ISSUE_URL)}>
+			<!-- <Menubar.Item on:click={() => openNewTab(ISSUE_URL)}>
 				Report a bug
-			</Menubar.Item>
+			</Menubar.Item> -->
 		</Menubar.Content>
 	</Menubar.Menu>
 </Menubar.Root>
