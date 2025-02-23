@@ -222,8 +222,10 @@
               {
                 loading: '주소를 검색하는 중...',
                 success: '위치를 찾았습니다',
-                error: (err: any) =>
-                  `${err.message || '주소 검색 중 오류가 발생했습니다'}`,
+                error: (err: any) => {
+                  console.log(err)
+                  return "작업을 수행할 수 없습니다. 페이지 새로고침 후 다시 시도해주세요.";
+                }
               }
             );
           }}
