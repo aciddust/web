@@ -44,12 +44,12 @@ self.onmessage = async (e: MessageEvent) => {
             `${moduleName}.pyc`,
           )
         );
-        // await pyodide.runPythonAsync(
-        //   await saveB64AsBinary(
-        //     await loadExternalFileAsBytes("PretendardVariable.ttf"),
-        //     "PretendardVariable.ttf",
-        //   )
-        // )
+        await pyodide.runPythonAsync(
+          await saveB64AsBinary(
+            await loadExternalFileAsBytes("/PretendardVariable.ttf"),
+            "PretendardVariable.ttf",
+          )
+        )
         const mangeldClientFilePath = `${hostURL}/${clientFilePath}`
         code = await getClientCode(moduleName, mangeldClientFilePath)
         console.log('code -> ', code)

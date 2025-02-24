@@ -59,8 +59,7 @@ class CloudManager:
         self.stopwords.union(set(stopwords))
 
     def set_stopwords(self, stopwords: list[str]) -> None:
-        self.stopwords = set(STOPWORDS)
-        self.stopwords.union(set(stopwords))
+        self.stopwords = STOPWORDS.union(set(stopwords))
 
     def set_bgcolor(self, bgcolor: str) -> None:
         self.bgcolor = bgcolor

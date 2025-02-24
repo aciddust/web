@@ -29,19 +29,37 @@ with open("${filename}", "wb") as file:
 
 
 const arrayBufferToBase64 = (buffer: Uint8Array) => {
-  let binary = '';
+  const encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  const byteLength = bytes.byteLength;
+  const byteRemainder = byteLength % 3;
+  const mainLength = byteLength - byteRemainder;
+  let base64 = '';
+
+  let a, b, c, d, chunk;
+  for (let i = 0; i < mainLength; i += 3) {
+    chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+    a = (chunk >> 18) & 63;
+    b = (chunk >> 12) & 63;
+    c = (chunk >> 6) & 63;
+    d = chunk & 63;
+    base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
   }
-  if (typeof window !== 'undefined' && window.btoa) {
-    return window.btoa(binary);
-  } else if (typeof Buffer !== 'undefined') {
-    return Buffer.from(binary, 'binary').toString('base64');
-  } else {
-    throw new Error('Neither btoa nor Buffer is available');
+
+  if (byteRemainder === 1) {
+    chunk = bytes[mainLength];
+    a = (chunk >> 2) & 63;
+    b = (chunk & 3) << 4;
+    base64 += encodings[a] + encodings[b] + '==';
+  } else if (byteRemainder === 2) {
+    chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
+    a = (chunk >> 10) & 63;
+    b = (chunk >> 4) & 63;
+    c = (chunk & 15) << 2;
+    base64 += encodings[a] + encodings[b] + encodings[c] + '=';
   }
+
+  return base64;
 }
 
 export const loadExternalFileAsBytes = async (fileUrl: string) => {
