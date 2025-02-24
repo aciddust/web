@@ -12,6 +12,7 @@ ${code}
 
 export const getClientCode = async (moduleName: string, clientFilePath: string) => {
   // get code as text
+  console.log('targetURL -> ', clientFilePath)
   const response = await fetch(clientFilePath);
   const code = await response.text();
   // generate code
@@ -27,21 +28,27 @@ with open("${filename}", "wb") as file:
 `
 
 
-const arrayBufferToBase64 = (buffer: Uint8Array<ArrayBuffer>) => {
+const arrayBufferToBase64 = (buffer: Uint8Array) => {
   let binary = '';
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
   for (let i = 0; i < len; i++) {
     binary += String.fromCharCode(bytes[i]);
   }
-  return window.btoa(binary);
+  if (typeof window !== 'undefined' && window.btoa) {
+    return window.btoa(binary);
+  } else if (typeof Buffer !== 'undefined') {
+    return Buffer.from(binary, 'binary').toString('base64');
+  } else {
+    throw new Error('Neither btoa nor Buffer is available');
+  }
 }
 
 export const loadExternalFileAsBytes = async (fileUrl: string) => {
   const response = await fetch(fileUrl);
-  const fileContent = await response.arrayBuffer();
-  const bytes = new Uint8Array(fileContent);
-  const base64 = arrayBufferToBase64(bytes);
+  const fileContent: ArrayBuffer = await response.arrayBuffer();
+  const newBytes: Uint8Array = new Uint8Array(fileContent);
+  const base64: string = arrayBufferToBase64(newBytes);
   return base64;
 }
 

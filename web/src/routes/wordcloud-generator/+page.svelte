@@ -1,88 +1,88 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { loadPyodide } from 'pyodide';
+  import { onMount, onDestroy } from 'svelte';
   import { Skeleton } from '$lib/components/ui/skeleton';
   import { Textarea } from '$lib/components/ui/textarea';
   import { Button } from '$lib/components/ui/button';
   import {
-    PYODIDE_URL,
-    PYODIDE_ROUTES,
-  } from '$lib/constants';
-  import {
     wordCloudInputExample,
     wordCloudStopwordsExample,
   } from '$lib/examples';
-  import {
-    runPython,
-    getClientCode,
-    saveB64AsBinary,
-    loadExternalFileAsBytes,
-  } from '$lib/pyodide/bridge';
   import { toast } from 'svelte-sonner';
 
-  let pyodide: any;
-  let code: string = '';
   let loading = true;
   let wordCloudInput = wordCloudInputExample
   let wordCloudStopwords = wordCloudStopwordsExample
   let wordCloudImageString = ''
-  const serviceName = 'wordcloud-generator'
+  let worker: Worker;
+  let isGenerating = false;
 
   onMount(async () => {
-      try {
-          pyodide = await loadPyodide({indexURL: PYODIDE_URL});
-          await pyodide.loadPackage('micropip');
-          const micropip = pyodide.pyimport('micropip');
-          await micropip.install('numpy');
-          await micropip.install('pillow');
-          await micropip.install('wordcloud');
-          const moduleName = PYODIDE_ROUTES[serviceName].module;
-          const clientFilePath = PYODIDE_ROUTES[serviceName].clientFilePath;
-          code = await getClientCode(moduleName, `${serviceName}/${clientFilePath}`)
-          await pyodide.runPythonAsync(
-            await saveB64AsBinary(
-              await loadExternalFileAsBytes(`${serviceName}/${moduleName}`),
-              `${moduleName}.pyc`,
-            )
-          );
-          await pyodide.runPythonAsync(
-            await saveB64AsBinary(
-              await loadExternalFileAsBytes("PretendardVariable.ttf"),
-              "PretendardVariable.ttf",
-            )
-          )
-          code = await getClientCode(moduleName, `${serviceName}/${clientFilePath}`)
-          loading = false;
-          toast.success('Ready!')
-      } catch (error) {
-          toast.error('Failed to load')
-      }
+    try {
+      worker = new Worker(
+        new URL('$lib/workers/pyodide.worker.ts', import.meta.url),
+        { type: 'module' }
+      );
+      worker.onmessage = (e) => {
+        const { type, payload } = e.data;
+        switch (type) {
+          case 'INIT_COMPLETE':
+            loading = false;
+            toast.success('Ready!');
+            break;
+          case 'GENERATE_COMPLETE':
+            const arrBuffer = new Uint8Array(payload).buffer;
+            let binary = '';
+            const bytes = new Uint8Array(arrBuffer);
+            const len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+              binary += String.fromCharCode(bytes[i]);
+            }
+            const b64String = btoa(binary);
+            wordCloudImageString = `data:image/png;base64,${b64String}`;
+            isGenerating = false;
+            toast.success('Done!');
+            break;
+          case 'ERROR':
+            console.error(payload)
+            toast.error(payload);
+            isGenerating = false;
+            break;
+        }
+      };
+
+      // Worker 초기화
+      worker.postMessage({
+        type: 'INIT',
+        payload: {
+          'protocol': window.location.protocol,
+          'host': window.location.host,
+          'pathname': window.location.pathname,
+        }
+      });
+
+    } catch (error) {
+      toast.error('Failed to load');
+    }
   });
 
-  const runClientCode = async (
-    pyodide: any,
-    inputData: string,
-    stopWords: string,
-  ) => {
-    if (!code) return
-    if (!pyodide) return
-    let newCode = (
-      `${code}\n` +
-      `func(module, """${inputData}""", """${stopWords}""")`
-    )
-    console.log(newCode)
-    await runPython(pyodide, newCode)
-    const imgData = await pyodide.FS.readFile('result.png', { encoding: 'binary' })
-    const arrBuffer = new Uint8Array(imgData).buffer
-    let binary = ''
-    const bytes = new Uint8Array(arrBuffer)
-    const len = bytes.byteLength
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i])
+  const generateWordCloud = async () => {
+    if (isGenerating) return;
+
+    isGenerating = true;
+    worker.postMessage({
+      type: 'GENERATE',
+      payload: {
+        input: wordCloudInput,
+        stopwords: wordCloudStopwords
+      }
+    });
+  };
+
+  onDestroy(() => {
+    if (worker) {
+      worker.terminate();
     }
-    const b64String = btoa(binary)
-    wordCloudImageString = `data:image/png;base64,${b64String}`
-  }
+  });
 </script>
 
 {#if loading}
@@ -120,12 +120,12 @@
     </div>
   </div>
   <div class="flex justify-center">
-    <Button on:click={
-      async () => {
-        await runClientCode(pyodide, wordCloudInput, wordCloudStopwords)
-        toast.success('Done!')
-      }} class="w-full">
-      Generate
+    <Button
+      on:click={generateWordCloud}
+      class="w-full"
+      disabled={isGenerating}
+    >
+      {isGenerating ? 'Generating...' : 'Generate'}
     </Button>
   </div>
 {/if}
