@@ -20,6 +20,11 @@ const config = {
 			"@/*": "./path/to/lib/*",
 		},
 	},
+	vitePlugin: {
+		worker: {
+			format: 'es',
+		}
+	}
 };
 
 export default config;

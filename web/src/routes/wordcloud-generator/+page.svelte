@@ -19,7 +19,7 @@
   onMount(async () => {
     try {
       worker = new Worker(
-        new URL('$lib/workers/pyodide.worker.ts', import.meta.url),
+        new URL('$lib/workers/wordcloud.worker.ts', import.meta.url),
         { type: 'module' }
       );
       worker.onmessage = (e) => {
