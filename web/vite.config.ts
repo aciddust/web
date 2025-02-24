@@ -22,6 +22,16 @@ export default defineConfig({
 			]
 		}),
 	],
+	build: {
+		rollupOptions: {
+			output: {
+				format: 'es', // server를 es module로 생성
+			},
+		},
+	},
+	worker: {
+		format: 'es', // web worker를 es module로 생성
+	},
 	optimizeDeps: {
 		exclude: ['lodash', 'sqlite3', 'sqlite'],
 	},
