@@ -6,16 +6,23 @@
 	import Container from "$lib/components/ui/area/container.svelte";
 	import { openNewTab, routeToPage }  from "$lib/utils";
 	import { DEFAULT_ROUTE, ISSUE_URL } from "$lib/constants";
-	let { children } = $props();
+	let { children } = $props<{ children: any }>();
+
+	import { page } from '$app/state';
 
 	import { injectAnalytics } from '@vercel/analytics/sveltekit'
-
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
+
+	const shouldShowGNB = () => {
+		// url의 경로가 /ziplink/[^/]+ 형식이 아닐 때만 GNB를 보여준다.
+		return !/^\/ziplink\/[^/]+/.test(page.url.pathname);
+  };
 
 </script>
 
 <Toaster />
 
+{#if shouldShowGNB()}
 <Menubar.Root>
   <Menubar.Menu> <!--0-->
     <Menubar.Trigger>T00LK1T</Menubar.Trigger>
@@ -86,6 +93,9 @@
 			<Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
 				Map Extractor
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('ziplink')}>
+				ZipLink
+			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 	<Menubar.Menu> <!--4-->
@@ -103,6 +113,7 @@
 		</Menubar.Content>
 	</Menubar.Menu>
 </Menubar.Root>
+{/if}
 
 <Container>
 {@render children()}

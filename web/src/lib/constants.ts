@@ -19,3 +19,8 @@ export const PYODIDE_ROUTES = {
     clientFilePath: "client.py",
   }
 }
+
+
+export const URLExpireDays = 30;
+export const URLLength = 6;
+export const URLPrefix = "ziplink";
