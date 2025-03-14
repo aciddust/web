@@ -14,8 +14,7 @@
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	const shouldShowGNB = () => {
-		// url의 경로가 /ziplink/[^/]+ 형식이 아닐 때만 GNB를 보여준다.
-		return !/^\/ziplink\/[^/]+/.test(page.url.pathname);
+		return !/^\/r\/[^/]+/.test(page.url.pathname);
   };
 
 </script>
