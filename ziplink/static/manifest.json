@@ -1,20 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "ZipLink",
+  "name": "Z1pLink",
   "version": "1.1.0",
-  "description": "ZipLink",
+  "description": "It makes your link shorter",
   "background": {
     "service_worker": "background.js"
+  },
+  "icons": {
+    "24": "icons/zip-box-24.png",
+    "36": "icons/zip-box-36.png",
+    "48": "icons/zip-box-48.png"
   },
   "action": {
     "default_title": "ZipLink",
     "default_popup": "index.html"
   },
-  "permissions": [
-    "activeTab",
-    "scripting",
-    "storage"
-  ],
   "host_permissions": [
     "http://localhost:5173/*",
     "https://web-ashen-psi.vercel.app/*"
