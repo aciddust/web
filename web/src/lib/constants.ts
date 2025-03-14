@@ -23,4 +23,4 @@ export const PYODIDE_ROUTES = {
 
 export const URLExpireDays = 30;
 export const URLLength = 6;
-export const URLPrefix = "ziplink";
+export const URLPrefix = "r";

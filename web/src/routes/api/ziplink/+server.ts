@@ -57,7 +57,8 @@ export async function POST({ request }) {
 
   return new Response(
     JSON.stringify({
-      url: `${new URL(request.url).origin}/${URLPrefix}/${shortenKey}`,
+      // url: `${new URL(request.url).origin}/${URLPrefix}/${shortenKey}`,
+      url: `https://o.z1p.link/${URLPrefix}/${shortenKey}`,
       expiredAt: new Date(expiredAt).toISOString(),
     }),
     {
