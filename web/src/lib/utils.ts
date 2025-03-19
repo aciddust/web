@@ -76,3 +76,12 @@ export const goBack = (defaultRoute = DEFAULT_ROUTE) => {
 export const openNewTab = (url: string) => {
 	window.open(url, "_blank");
 }
+
+export const genCode = (length: number = 6) => {
+	const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	let result = "";
+	for (let i = 0; i < length; i++) {
+		result += charset.charAt(Math.floor(Math.random() * charset.length));
+	}
+	return result;
+}

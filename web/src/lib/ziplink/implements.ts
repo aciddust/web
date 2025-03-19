@@ -1,4 +1,3 @@
-import type { Redis } from 'ioredis';
 import redis from "$lib/server/redis"
 import { URLPrefix } from '$lib/constants';
 
