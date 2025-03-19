@@ -33,6 +33,7 @@
 
   // this site host
   let siteHost: string;
+  let siteProtocol: string;
 
   async function fetchMessages() {
     try {
@@ -89,6 +90,7 @@
   onMount(() => {
     if (window) {
       siteHost = window.location.host
+      siteProtocol = window.location.protocol
     }
     fetchMessages();
     intervalId = setInterval(fetchMessages, 3000);
@@ -138,7 +140,7 @@
           toast.error('토큰이 없습니다. 페이지 새로고침 후 다시 시도해주세요');
           return;
             }
-            const curl = `curl -X POST ${siteHost}/api/echo/${id} -H "Content-Type: application/json" -H "Authorization: Bearer ${localEchoToken}" -d '${JSON.stringify(VALUE_EXAMPLE())}'`;
+            const curl = `curl -X POST ${siteProtocol}://${siteHost}/api/echo/${id} -H "Content-Type: application/json" -H "Authorization: Bearer ${localEchoToken}" -d '${JSON.stringify(VALUE_EXAMPLE())}'`;
             navigator.clipboard.writeText(curl);
             toast.success('쉘에서 스크립트를 실행해보세요');
             }}
