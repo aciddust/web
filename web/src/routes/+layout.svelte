@@ -48,6 +48,9 @@
 			<Menubar.Item on:click={() => routeToPage('hmac')}>
 				HMAC
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('echo')}>
+				Echo
+			</Menubar.Item>
       <Menubar.Separator />
       <Menubar.Item on:click={async () => {
 				// press esc key to close the menu
