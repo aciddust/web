@@ -93,7 +93,7 @@
       siteProtocol = window.location.protocol
     }
     fetchMessages();
-    intervalId = setInterval(fetchMessages, 3000);
+    intervalId = setInterval(fetchMessages, 10000);
   });
   onDestroy(() => {
     // 컴포넌트가 제거될 때 interval 정리

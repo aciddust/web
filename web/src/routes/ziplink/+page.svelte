@@ -11,6 +11,10 @@
 
   const setUrl = async () => {
     const url = $inputUrl;
+    if (!url.startsWith('http')) {
+      toast.error("URL must be startswith http or https");
+      return;
+    }
     const response = await fetch('/api/ziplink', {
       method: 'POST',
       headers: {
@@ -86,6 +90,7 @@
           class="w-[300px]"
           id='output'
           type='text'
+          placeholder='https://z1p.link'
           bind:value={$outputUrl}
         />
       </div>

@@ -6,7 +6,6 @@ import {
 import {
   makeRandomString,
   setUrl,
-  getUrl,
 } from '$lib/ziplink/implements.js';
 
 export async function POST({ request }) {
