@@ -40,12 +40,20 @@
           class="w-[300px]"
           id='url'
           type='text'
-          placeholder='https://example.com'
+          placeholder='https://z1p.link'
           bind:value={$inputUrl}
         />
       </div>
       <div class='flex justify-center'>
         <Button on:click={() => {
+          if (!$inputUrl.startsWith('http')) {
+            toast.error('URL must be startswith http or https');
+            return;
+          }
+          if (!$inputUrl) {
+            toast.error('URL is required');
+            return;
+          }
           toast.promise(setUrl(), {
             loading: 'Shortening...',
             success: (data) => {
