@@ -18,6 +18,7 @@
   let name = '신분당선 강남역 4번출구';
   let lastMapObject: any;
   let mapReady = false;
+  let isKakaoReady = false;
   let isSearching = false;
   let isDrawing = false;
 
@@ -66,7 +67,7 @@
     zoom: number = 4,
   ) => {
     if (!kakao) {
-      console.log('no kakao')
+      toast.error('카카오맵 API가 로드되지 않았습니다.');
       return;
     }
     // 이전 지도 객체가 있다면 컨테이너를 초기화
@@ -74,13 +75,21 @@
       mapContainer.innerHTML = '';
       mapReady = false;
     }
+    let pos;
+    try {
+      pos = new kakao.maps.LatLng(lat, lng);
+    } catch (e) {
+      // refresh page
+      location.reload();
+      return;
+    }
 
     const staticMapOption = {
         marker : {
           text: '',
-          position: new kakao.maps.LatLng(lat, lng) // 좌표가 없으면 지도 중심에 마커가 표시된다
+          position: pos // 좌표가 없으면 지도 중심에 마커가 표시된다
         },
-        center: new kakao.maps.LatLng(lat, lng), // 이미지 지도의 중심 좌표
+        center: pos, // 이미지 지도의 중심 좌표
         level: zoom, // 이미지 지도의 확대 레벨
         mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
       };
@@ -126,33 +135,37 @@
     drawMap(lat, lng, name, zoom);
   };
 
-  onMount(async () => {
+  onMount(() => {
     try {
-      // kakao maps API가 로드될 때까지 대기
-      await new Promise((resolve) => {
-        const checkKakao = setInterval(() => {
-          if (window.kakao && window.kakao.maps) {
-            clearInterval(checkKakao);
-            resolve(true);
+      // Use a recursive function instead of async/await for checking Kakao API
+      const checkKakaoAvailability = () => {
+        if (window.kakao && window.kakao.maps) {
+          kakao = window.kakao;
+          isKakaoReady = true;
+          const staticMapContainer = document.getElementById('map');
+          if (!staticMapContainer) {
+            throw new Error('지도 컨테이너를 찾을 수 없습니다.');
           }
-        }, 100);
-      });
-      kakao = window.kakao;
-      const staticMapContainer = document.getElementById('map');
-      if (!staticMapContainer) {
-        throw new Error('지도 컨테이너를 찾을 수 없습니다.');
-      }
-      mapContainer = staticMapContainer;
-
-      toast.success("Ready");
+          mapContainer = staticMapContainer;
+          toast.success("Ready");
+        } else {
+          console.log('waiting for kakao maps API...');
+          setTimeout(checkKakaoAvailability, 100);
+        }
+      };
+      
+      // Start checking
+      checkKakaoAvailability();
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error('카카오맵 초기화 중 오류가 발생했습니다.');
     }
   });
 
   $: {
-    drawMap(lat, lng, name, zoom);
+    if (isKakaoReady && mapContainer) {
+      drawMap(lat, lng, name, zoom);
+    }
   }
 </script>
 
