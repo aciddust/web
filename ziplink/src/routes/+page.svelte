@@ -1,8 +1,9 @@
 <script lang='ts'>
-  import { fade, slide } from 'svelte/transition';
+  import { slide } from 'svelte/transition';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import Label from '$lib/components/ui/label/label.svelte';
+  import Copy from "lucide-svelte/icons/copy";
+  import SquareArrowOutUpRight from "lucide-svelte/icons/square-arrow-out-up-right";
 	import { toast } from 'svelte-sonner';
 	import { writable } from 'svelte/store';
 
@@ -81,25 +82,33 @@
         <h1 class='text-4xl font-bold'>Output</h1>
       </div>
       <div class='flex flex-col space-y-1'>
-        <Label for='output'>Shortened URL</Label>
-        <Input
-          class="w-[300px]"
-          id='output'
-          type='text'
-          bind:value={$outputUrl}
-        />
+        <div class="relative w-[300px]">
+          <button
+            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500"
+            on:click={() => window.open($outputUrl, '_blank')}
+          >
+            <SquareArrowOutUpRight size={16} />
+          </button>
+          <Input
+            class="w-full pl-8 pr-8"
+            id='output'
+            type='text'
+            bind:value={$outputUrl}
+          />
+          <button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700"
+            on:click={() => {
+              navigator.clipboard.writeText($outputUrl);
+              toast('Copied to clipboard');
+            }}
+          >
+            <Copy size={16} />
+          </button>
+        </div>
       </div>
       <!-- copy button -->
-      <div class='flex justify-between'>
-        <div class='flex justify-center space-x-2'>
-          <Button on:click={() => {
-            navigator.clipboard.writeText($outputUrl);
-            toast('Copied to clipboard');
-          }}>Copy</Button>
+      <div class='flex w-full'>
+        <div class='flex w-full justify-center space-x-2'>
           <Button variant='outline' on:click={() => outputUrl.set('')}>Clear</Button>
-        </div>
-        <div class='flex justify-center'>
-          <Button variant='outline' on:click={() => window.open($outputUrl, '_blank')}>Open</Button>
         </div>
       </div>
     </div>
