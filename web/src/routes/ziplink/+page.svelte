@@ -1,8 +1,9 @@
 <script lang='ts'>
-  import { fade, slide } from 'svelte/transition';
+  import { slide } from 'svelte/transition';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import Label from '$lib/components/ui/label/label.svelte';
+  import Copy from "lucide-svelte/icons/copy";
+  import SquareArrowOutUpRight from "lucide-svelte/icons/square-arrow-out-up-right";
 	import { toast } from 'svelte-sonner';
 	import { writable } from 'svelte/store';
 
@@ -48,13 +49,31 @@
         </button>
       </div>
       <div class='flex flex-col space-y-1'>
-        <Input
-          class="w-[300px]"
-          id='url'
-          type='text'
-          placeholder='https://example.com'
-          bind:value={$inputUrl}
-        />
+        <div class="relative w-[300px]">
+          <Input
+            class="w-full"
+            id='url'
+            type='text'
+            placeholder='https://example.com'
+            bind:value={$inputUrl}
+            on:keydown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                toast.promise(setUrl(), {
+                  loading: 'Shortening...',
+                  success: (data) => {
+                    outputUrl.set(data.url);
+                    return 'Done';
+                  },
+                  error: (err) => {
+                    console.error(err);
+                    return 'Error.. Try later';
+                  }
+                });
+              }
+            }}
+          />
+        </div>
       </div>
       <div class='flex justify-center'>
         <Button on:click={() => {
@@ -81,30 +100,37 @@
     out:slide={{ duration: 300, delay: 0 }}
   >
     <div class="flex flex-col justify-center border border-gray-200 p-4 rounded space-y-4">
-      <div class='flex items-center justify-center'>
-        <h1 class='text-4xl font-bold'>Output</h1>
-      </div>
       <div class='flex flex-col space-y-1'>
-        <Label for='output'>Shortened URL</Label>
-        <Input
-          class="w-[300px]"
-          id='output'
-          type='text'
-          placeholder='https://z1p.link'
-          bind:value={$outputUrl}
-        />
+        <div class="relative w-[300px]">
+          <div class="flex items-center w-full relative">
+            <button
+              on:click={() => window.open($outputUrl, '_blank')}
+              class="absolute left-2 text-gray-500">
+              <SquareArrowOutUpRight size={18}/>
+            </button>
+            <Input
+              class="w-full pl-9 pr-10"
+              id='output'
+              type='text'
+              placeholder='https://z1p.link'
+              bind:value={$outputUrl}
+            />
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+              on:click={() => {
+              navigator.clipboard.writeText($outputUrl);
+              toast.success('Copied to clipboard');
+              }}
+              aria-label="Copy to clipboard">
+              <Copy size={18} />
+            </button>
+          </div>
+        </div>
       </div>
       <!-- copy button -->
-      <div class='flex justify-between'>
-        <div class='flex justify-center space-x-2'>
-          <Button on:click={() => {
-            navigator.clipboard.writeText($outputUrl);
-            toast('Copied to clipboard');
-          }}>Copy</Button>
+      <div class='flex w-full'>
+        <div class='flex w-full justify-center space-x-2'>
           <Button variant='outline' on:click={() => outputUrl.set('')}>Clear</Button>
-        </div>
-        <div class='flex justify-center'>
-          <Button variant='outline' on:click={() => window.open($outputUrl, '_blank')}>Open</Button>
         </div>
       </div>
     </div>
