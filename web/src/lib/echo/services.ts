@@ -8,6 +8,10 @@ const mangleChatKey = (id: string) => {
   return `chat:echo:${id}`
 }
 
+const mangleStringKey = (key: string) => {
+  return `chat:echo-v2:${key}`
+}
+
 export const messageType = {
   TEXT: "text",
   JSON: "json",
@@ -97,6 +101,24 @@ export const chatExists = async (id: string) => {
   }
 }
 
+export const keyExists = async (key: string) => {
+  try {
+    if (!redis) {
+      return null
+    }
+    await redis?.ping();
+    const exists = await redis.exists(mangleStringKey(key));
+    if (exists) {
+      return true
+    }
+    return false
+  }
+  catch (error) {
+    console.error("Redis error: ", error);
+    return null
+  }
+}
+
 export const sendMessage = async (message: MessageIn) => {
   try {
     if (!redis) {
@@ -138,6 +160,22 @@ export const destroyChat = async (id: string) => {
     await redis?.ping();
     const key = mangleChatKey(id)
     await redis.del(key);
+    return true
+  } catch (error) {
+    console.error("Redis error: ", error);
+    return false
+  }
+}
+
+
+export const setKey = async (key: string) => {
+  try {
+    if (!redis) {
+      return null
+    }
+    await redis?.ping();
+    await redis.set(mangleStringKey(key), new Date().toISOString());
+    await redis.expire(mangleStringKey(key), 60 * (TOKEN_EXPIRE_MINUTES + 1));
     return true
   } catch (error) {
     console.error("Redis error: ", error);

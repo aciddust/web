@@ -19,8 +19,15 @@
   const createSpace = async () => {
     let result;
     while (true) {
-      result = await fetch(`/api/echo/${$spaceId}/enter`, {
-        method: 'GET',
+      let body = {
+        id: $spaceId,
+      }
+      result = await fetch('/api/echo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
       });
       if (result.ok) {
         break;
