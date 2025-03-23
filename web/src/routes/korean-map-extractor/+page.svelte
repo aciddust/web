@@ -11,11 +11,11 @@
   let height = 350;
   let kakao: any;
   let mapContainer: HTMLElement;
-  let address = "강남대로 311";
-  let lat = 37.4956
-  let lng = 127.02905
+  let address = "서울 서초구 강남대로 311";
+  let lat = 37.4908947432125
+  let lng = 127.030298685019
   let zoom = 3
-  let name = '신분당선 강남역 4번출구';
+  let name = '서울 서초구 강남대로 311';
   let lastMapObject: any;
   let mapReady = false;
   let isKakaoReady = false;
@@ -153,7 +153,7 @@
           setTimeout(checkKakaoAvailability, 100);
         }
       };
-      
+
       // Start checking
       checkKakaoAvailability();
     } catch (error) {
