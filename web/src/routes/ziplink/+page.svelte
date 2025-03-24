@@ -4,6 +4,7 @@
 	import Input from '$lib/components/ui/input/input.svelte';
   import Copy from "lucide-svelte/icons/copy";
   import SquareArrowOutUpRight from "lucide-svelte/icons/square-arrow-out-up-right";
+  import Share from "lucide-svelte/icons/share";
 	import { toast } from 'svelte-sonner';
 	import { writable } from 'svelte/store';
 
@@ -123,6 +124,20 @@
               }}
               aria-label="Copy to clipboard">
               <Copy size={18} />
+            </button>
+            <button
+              class="absolute right-10 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+              on:click={() => {
+                navigator.clipboard.writeText($outputUrl);
+                navigator.share({
+                  title: 'ZipLink',
+                  text: 'Check out this link!',
+                  url: $outputUrl
+                });
+              }}
+              aria-label="Share"
+            >
+              <Share size={18} />
             </button>
           </div>
         </div>
