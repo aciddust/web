@@ -17,7 +17,11 @@ export const PYODIDE_ROUTES = {
   "hmac": {
     module: "func",
     clientFilePath: "client.py",
-  }
+  },
+  "hwp-parser": {
+    module: "func",
+    clientFilePath: "client.py",
+  },
 }
 
 

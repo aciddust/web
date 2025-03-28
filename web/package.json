@@ -59,6 +59,7 @@
 		"@vercel/analytics": "^1.5.0",
 		"bcryptjs": "^3.0.0",
 		"diff-match-patch": "^1.0.5",
+		"groq-sdk": "^0.17.0",
 		"highlight.js": "^11.11.1",
 		"ioredis": "^5.6.0",
 		"jsonwebtoken": "^9.0.2",
