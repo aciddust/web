@@ -84,6 +84,9 @@
 			<Menubar.Item on:click={() => routeToPage('binjector')}>
 				Binjector
 			</Menubar.Item>
+			<Menubar.Item on:click={() => routeToPage('hwp-parser/notice')}>
+				HWP: Parser
+			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 	<Menubar.Menu> <!--3-->
