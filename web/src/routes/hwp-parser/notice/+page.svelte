@@ -46,13 +46,13 @@
           pyodide = await loadPyodide({indexURL: PYODIDE_URL});
           const moduleName = PYODIDE_ROUTES[serviceName].module;
           const clientFilePath = PYODIDE_ROUTES[serviceName].clientFilePath;
-          code = await getClientCode(moduleName, `${serviceName}/${clientFilePath}`)
+          code = await getClientCode(moduleName, `/${serviceName}/${clientFilePath}`)
           await pyodide.loadPackage('micropip');
           const micropip = pyodide.pyimport('micropip');
           await micropip.install('olefile');
           await pyodide.runPythonAsync(
             saveB64AsBinary(
-              await loadExternalFileAsBytes(`${serviceName}/${moduleName}`),
+              await loadExternalFileAsBytes(`/${serviceName}/${moduleName}`),
               `${moduleName}.pyc`,
             )
           );
