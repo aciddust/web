@@ -1,6 +1,9 @@
 import { Groq } from 'groq-sdk';
 import { GROQ_API_KEY } from '$env/static/private';
-import { ASSISTANT_PROMPT } from './prompts';
+import {
+  ASSISTANT_PROMPT_TYPE_A,
+  ASSISTANT_PROMPT_TYPE_B,
+} from '../prompts';
 
 import type { RequestEvent } from '@sveltejs/kit';
 
@@ -9,7 +12,20 @@ export const POST = async (event: RequestEvent): Promise<Response> => {
   const groq = new Groq({ apiKey: GROQ_API_KEY });
 
   try {
-    const { text } = await event.request.json();
+    const { text, type } = await event.request.json();
+    if (!text) {
+      return new Response(JSON.stringify({ error: 'No text provided' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    if (!type) {
+      return new Response(JSON.stringify({ error: 'No version provided' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    const ASSISTANT_PROMPT = type === 'A' ? ASSISTANT_PROMPT_TYPE_A : ASSISTANT_PROMPT_TYPE_B;
     const response = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       temperature: 1,
@@ -34,6 +50,7 @@ export const POST = async (event: RequestEvent): Promise<Response> => {
     });
   }
   catch (error) {
+    console.log(error)
     return new Response(JSON.stringify({ error: 'Failed to send message' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

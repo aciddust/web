@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { loadPyodide } from 'pyodide';
   import { toast } from 'svelte-sonner';
+  import { writable } from 'svelte/store';
   import { PYODIDE_ROUTES, PYODIDE_URL } from '$lib/constants';
 	import { getClientCode, loadExternalFileAsBytes, saveB64AsBinary } from '@/pyodide/bridge';
 	import Textarea from '@/components/ui/textarea/textarea.svelte';
@@ -12,23 +13,29 @@
 	import Copy from 'lucide-svelte/icons/copy';
   import RefreshCw from 'lucide-svelte/icons/refresh-cw';
   import * as Dialog from "$lib/components/ui/dialog/index.js";
+  import * as Select from "$lib/components/ui/select";
 
   let pyodide: any;
   let loading = true;
   let code = ''
   let parsedText = ''
   let jsonText = ''
+  const selectedType = writable({ value: "A", label: 'Type A: 20250328' });
   const serviceName = 'hwp-parser'
 
   const summarize = async () => {
-    const URL = '/api/parse-notice'
+    const URL = '/api/parse-notice/v1'
+    let currentType = $selectedType.value ?? 'A';
     try {
       const response = await fetch(URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: parsedText }),
+        body: JSON.stringify({
+          type: currentType,
+          text: parsedText
+        }),
       });
       const data = await response.json();
       jsonText = JSON.stringify(data, null, 2);
@@ -150,7 +157,18 @@
       </Dialog.Header>
     </Dialog.Content>
   </Dialog.Root>
-  <p class='text-lg'>Upload a .hwp file to parse its content</p>
+  <p class='text-lg pb-4'>Upload a .hwp file to parse its content</p>
+  <Select.Root
+    bind:selected={$selectedType}
+  >
+    <Select.Trigger class="w-[180px]">
+      <Select.Value placeholder="Output Type" />
+    </Select.Trigger>
+    <Select.Content>
+      <Select.Item value="A">Type A: 20250328</Select.Item>
+      <Select.Item value="B">Type B: 20250329</Select.Item>
+    </Select.Content>
+  </Select.Root>
 </div>
 <div class='flex items-center space-x-4 pt-4'>
   <div class="w-full flex flex-col items-center space-y-2">
