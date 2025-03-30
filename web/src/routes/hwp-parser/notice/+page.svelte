@@ -24,7 +24,7 @@
   const serviceName = 'hwp-parser'
 
   const summarize = async () => {
-    const URL = '/api/parse-notice/v1'
+    const URL = `/api/parse-notice/type-${$selectedType.value.toLowerCase() ?? 'a'}`;
     let currentType = $selectedType.value ?? 'A';
     try {
       const response = await fetch(URL, {
@@ -33,7 +33,6 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          type: currentType,
           text: parsedText
         }),
       });
@@ -167,6 +166,7 @@
     <Select.Content>
       <Select.Item value="A">Type A: 20250328</Select.Item>
       <Select.Item value="B">Type B: 20250329</Select.Item>
+      <Select.Item value="C">Type C: 20250330</Select.Item>
     </Select.Content>
   </Select.Root>
 </div>
