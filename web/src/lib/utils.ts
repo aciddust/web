@@ -85,3 +85,24 @@ export const genCode = (length: number = 6) => {
 	}
 	return result;
 }
+
+// 페이지 새로고침 하면서 이동
+export const navigateWithRefresh = (route: string, preserveQueryParams: boolean = false) => {
+  const currentUrl = new URL(window.location.href);
+  const targetUrl = new URL(`${window.location.origin}/${route}`);
+
+  // 쿼리 파라미터 유지 옵션
+  if (preserveQueryParams) {
+    currentUrl.searchParams.forEach((value, key) => {
+      targetUrl.searchParams.append(key, value);
+    });
+  }
+
+  window.location.href = targetUrl.toString();
+}
+
+
+// 히스토리 대체하면서 새로고침 (뒤로가기 방지)
+export const replaceWithRefresh = (route: string) => {
+  window.location.replace(`/${route}`);
+}

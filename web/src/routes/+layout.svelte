@@ -4,7 +4,7 @@
 	import { Toaster } from "$lib/components/ui/sonner";
 	import * as Menubar from "$lib/components/ui/menubar";
 	import Container from "$lib/components/ui/area/container.svelte";
-	import { openNewTab, routeToPage }  from "$lib/utils";
+	import { openNewTab, routeToPage, navigateWithRefresh }  from "$lib/utils";
 	import { DEFAULT_ROUTE, ISSUE_URL } from "$lib/constants";
 	let { children } = $props<{ children: any }>();
 
@@ -92,9 +92,20 @@
 	<Menubar.Menu> <!--3-->
 		<Menubar.Trigger>Services</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item on:click={() => routeToPage('school/schedule/중학교')}>
-				Arcadia: Beta
-			</Menubar.Item>
+			<Menubar.Sub>
+				<Menubar.SubTrigger>Arcadia: Beta</Menubar.SubTrigger>
+				<Menubar.SubContent>
+					<Menubar.Item on:click={() => navigateWithRefresh('school/schedule/초등학교', true)}>
+						초등학교
+					</Menubar.Item>
+					<Menubar.Item on:click={() => navigateWithRefresh('school/schedule/중학교', true)}>
+						중학교
+					</Menubar.Item>
+					<Menubar.Item on:click={() => navigateWithRefresh('school/schedule/고등학교', true)}>
+						고등학교
+					</Menubar.Item>
+				</Menubar.SubContent>
+			</Menubar.Sub>
 			<Menubar.Item on:click={() => routeToPage('korean-map-extractor')}>
 				Map Extractor
 			</Menubar.Item>
