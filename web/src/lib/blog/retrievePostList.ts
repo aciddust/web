@@ -147,16 +147,7 @@ export async function getMarkdownFromGithub(postId: string): Promise<string> {
   const markdownResponse = await fetch(download_url);
   if (markdownResponse.ok) {
     const result = await markdownResponse.text();
-    // 다양한 언어 예시
-    const examples = {
-      python: "\n\n```\nprint('Hello, World!')\n```\n",
-      javascript: "\n\n```javascript\nconsole.log('Hello, World!');\n```\n",
-      typescript: "\n\n```typescript\nconst greeting: string = 'Hello, World!';\nconsole.log(greeting);\n```\n",
-      rust: "\n\n```\nfn main() {\n    println!(\"Hello, World!\");\n}\n```\n",
-      go: "\n\n```go\npackage main\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}\n```\n"
-    };
-    const customMarkdownAddon = examples.rust
-    return result + '\n\n' + customMarkdownAddon + '\n\n' + customMarkdownAddon + '\n\n' + customMarkdownAddon + '\n\n' + customMarkdownAddon + '\n\n' + customMarkdownAddon + '\n\n';
+    return result
   }
   return ''; // FIXME: no content page
 }
