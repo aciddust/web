@@ -55,14 +55,14 @@ class HWPParser:
         Yields:
             Document: 추출된 문서
         """
-        load_file = olefile.OleFileIO(self.file_path)
-        file_dir = load_file.listdir()
-        logger.info('file_dir: %s', file_dir)
+        hwp_file = olefile.OleFileIO(self.file_path)
+        dirs = hwp_file.listdir()
+        logger.info('file_dir: %s', dirs)
 
-        if not self._is_valid_hwp(file_dir):
+        if not self._is_valid_hwp(dirs):
             raise ValueError("유효하지 않은 HWP 파일입니다.")
 
-        result_text = self._extract_text(load_file, file_dir)
+        result_text = self._extract_text(hwp_file, dirs)
         yield self._create_document(
             text=result_text,
             extra_info=self.extra_info,
@@ -105,21 +105,21 @@ class HWPParser:
 
 
     def _extract_text(
-        self, load_file: olefile.OleFileIO, file_dir: list[list[str]]
+        self, hwp_file: olefile.OleFileIO, file_dir: list[list[str]]
     ) -> str:
         """모든 섹션에서 텍스트를 추출합니다."""
         sections = self._get_body_sections(file_dir)
         return "\n".join(
-            self._get_text_from_section(load_file, section) for section in sections
+            self._get_text_from_section(hwp_file, section) for section in sections
         )
 
-    def _is_compressed(self, load_file: olefile.OleFileIO) -> bool:
+    def _is_compressed(self, hwp_file: olefile.OleFileIO) -> bool:
         """파일이 압축되었는지 확인합니다."""
-        with load_file.openstream(self.FILE_HEADER_SECTION) as header:
+        with hwp_file.openstream(self.FILE_HEADER_SECTION) as header:
             header_data = header.read()
             return bool(header_data[36] & 1)
 
-    def _get_text_from_section(self, load_file: olefile.OleFileIO, section: str) -> str:
+    def _get_text_from_section(self, hwp_file: olefile.OleFileIO, section: str) -> str:
         """
         특정 섹션에서 텍스트를 추출합니다.
 
@@ -133,7 +133,7 @@ class HWPParser:
         읽어온 데이터는 2바이트 단위로 읽어와야하며,
         텍스트로 변환하여 반환합니다.
         """
-        with load_file.openstream(section) as bodytext:
+        with hwp_file.openstream(section) as bodytext:
             logger.info('section: %s', section)
             data = bodytext.read()
 
@@ -142,7 +142,7 @@ class HWPParser:
             # 31: gzip header
             # -15: no header, raw deflate
             zlib.decompress(data, -15)
-            if self._is_compressed(load_file)
+            if self._is_compressed(hwp_file)
             else data
         )
 
