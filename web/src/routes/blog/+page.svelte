@@ -79,23 +79,40 @@
   </div>
 {:else}
 <div class="max-w-4xl mx-auto py-2">
-  <!-- 카테고리 선택 영역 -->
-  <div class="sticky top-0 bg-white z-10 p-4 mb-4 border-b">
-    <div class="flex space-x-4">
+  <div class="sticky top-0 z-10 bg-white pt-4">
+    <div class="flex space-x-1 px-2 pb-1">
       <button
-        class="text-2xl font-semibold {currentCategory === 'all' ? 'text-blue-500' : ''}"
+        class="relative px-6 py-2 rounded-t-lg font-semibold transition-all {
+          currentCategory === 'all' 
+            ? 'bg-blue-500 text-white shadow-lg translate-y-0' 
+            : 'bg-gray-100 hover:bg-gray-200 text-gray-700 translate-y-1'
+        }"
         on:click={() => selectCategory('all')}
       >
         Total
-        <span class="ml-2 text-sm text-gray-500">({originTotalPostCount})</span>
+        <span class="ml-1 text-xs {currentCategory === 'all' ? 'text-blue-100' : 'text-gray-500'}">
+          ({originTotalPostCount})
+        </span>
+        {#if currentCategory === 'all'}
+          <span class="absolute bottom-0 left-0 w-full h-1 bg-blue-500"></span>
+        {/if}
       </button>
       {#each Object.entries(postListByCategory) as [category, { total }]}
         <button
-          class="text-2xl font-semibold {currentCategory === category ? 'text-blue-500' : ''}"
+          class="relative px-6 py-2 rounded-t-lg font-semibold transition-all {
+            currentCategory === category 
+              ? 'bg-blue-500 text-white shadow-lg translate-y-0' 
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-700 translate-y-1'
+          }"
           on:click={() => selectCategory(category)}
         >
           {category}
-          <span class="ml-2 text-sm text-gray-500">({total})</span>
+          <span class="ml-1 text-xs {currentCategory === category ? 'text-blue-100' : 'text-gray-500'}">
+            ({total})
+          </span>
+          {#if currentCategory === category}
+            <span class="absolute bottom-0 left-0 w-full h-1 bg-blue-500"></span>
+          {/if}
         </button>
       {/each}
     </div>

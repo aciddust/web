@@ -1,4 +1,5 @@
 <script lang="ts">
+
 	import '../app.css';
 	import { dev } from '$app/environment';
 	import { Toaster } from "$lib/components/ui/sonner";
@@ -92,6 +93,10 @@
 	<Menubar.Menu> <!--3-->
 		<Menubar.Trigger>Services</Menubar.Trigger>
 		<Menubar.Content>
+			<Menubar.Item on:click={() => routeToPage('blog')}>
+				Blog
+			</Menubar.Item>
+			<Menubar.Separator />
 			<Menubar.Sub>
 				<Menubar.SubTrigger>Arcadia: Beta</Menubar.SubTrigger>
 				<Menubar.SubContent>
