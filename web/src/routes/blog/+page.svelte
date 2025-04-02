@@ -125,7 +125,7 @@
     </div>
   {:else}
     <!-- 첫 페이지에는 최근 10개 포스트만 표시 -->
-    <div class="grid grid-cols-1 gap-4 mb-8">
+    <div class="grid grid-cols-1 gap-2 mb-8">
       {#each currentPosts as post}
         <PostCard post={post} categoryQuery={currentCategory}  />
       {/each}
