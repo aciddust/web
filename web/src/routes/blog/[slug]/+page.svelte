@@ -94,7 +94,7 @@
 </script>
 
 <div class="max-w-4xl mx-auto px-4 pb-16">
-  <div class="flex items-center justify-between mb-8 sticky top-5 bg-white z-10">
+  <div class="flex items-center justify-between mb-8 sticky top-5 bg-transparent z-10">
     <Button on:click={() => history.back()} variant="outline">
       <Back class="h-4 w-4" />
       <span class="sr-only">Back</span>
@@ -110,7 +110,7 @@
           <ArrowDown class="h-4 w-4" />
         </Button>
       {/if}
-      <Button variant="outline" on:click={() => {
+      <!-- <Button variant="outline" on:click={() => {
         if (navigator.share) {
           navigator.share({
             title: document.title,
@@ -122,7 +122,7 @@
         }
       }}>
         <Share class="h-4 w-4" />
-      </Button>
+      </Button> -->
     </div>
   </div>
   <!-- <article class="prose prose-slate mx-auto">
