@@ -201,6 +201,8 @@
 <svelte:head>
   <title>스도쿠 정답 생성기</title>
   <meta name="description" content="무작위 6x6 스도쿠 정답을 생성합니다." />
+  <!-- 모바일화면 확대 금지 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </svelte:head>
 
 <div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 p-4">
