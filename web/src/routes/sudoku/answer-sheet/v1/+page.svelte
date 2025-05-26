@@ -180,8 +180,9 @@
 
   // 보드의 셀 스타일 결정
   function getCellClass(row: number, col: number): string {
-    let classes = 'flex items-center justify-center text-2xl font-bold border border-gray-400 ';
-    classes += 'w-[60px] h-[60px] '; // 정답표시용으로 크게
+    let classes = 'flex items-center justify-center font-bold border border-gray-400 ';
+    classes += 'aspect-square '; // 정사각형 비율 유지
+    classes += 'text-lg sm:text-xl md:text-2xl '; // 반응형 텍스트 크기
     classes += 'bg-white text-gray-800 ';
 
     // 박스 구분을 위한 굵은 테두리
@@ -233,10 +234,10 @@
 
         {#if board.length > 0}
           <div class="flex justify-center mb-6">
-            <div class="grid grid-cols-6 border-2 border-gray-900 inline-block">
+            <div class="grid grid-cols-6 border-2 border-gray-900 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
               {#each board as row, rowIndex}
                 {#each row as cell, colIndex}
-                  <div class={getCellClass(rowIndex, colIndex)} style="w-100 h-100">
+                  <div class={getCellClass(rowIndex, colIndex)}>
                     {cell}
                   </div>
                 {/each}
