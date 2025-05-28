@@ -3,6 +3,6 @@
   import { goto } from '$app/navigation';
 
   onMount(() => {
-    goto('/sudoku/answer-sheet/v2');
+    goto('/sudoku/answer-sheet/v2/6');
   })
 </script>
