@@ -4,6 +4,7 @@
   import Base64 from './components/base64.svelte';
   import URL from './components/url.svelte';
   import HashPassword from './components/hash-password.svelte';
+	import Base64Image from './components/base64-image.svelte';
 
   let loading = true;
 
@@ -24,8 +25,9 @@
     <div class="flex flex-col space-y-2">
       <h1 class="text-2xl font-bold">Encoder Decoder</h1>
     </div>
-    <Base64 />
     <URL />
     <HashPassword />
+    <Base64 />
+    <Base64Image />
   </div>
 {/if}
