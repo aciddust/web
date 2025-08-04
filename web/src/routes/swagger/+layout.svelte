@@ -45,6 +45,7 @@
         url: "https://petstore.swagger.io/v2/swagger.json", // 예제 URL
         dom_id: '#swagger-ui',
         deepLinking: true,
+        supportedSubmitMethods: [],
         presets: [
           (window as any).SwaggerUIBundle.presets.apis,
           (window as any).SwaggerUIStandalonePreset

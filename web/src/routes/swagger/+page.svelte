@@ -35,6 +35,7 @@
             spec,
             dom_id: '#swagger-ui',
             deepLinking: true,
+            supportedSubmitMethods: [],
             presets: [
               (window as any).SwaggerUIBundle.presets.apis,
               (window as any).SwaggerUIStandalonePreset
@@ -59,6 +60,7 @@
         url: "https://petstore.swagger.io/v2/swagger.json",
         dom_id: '#swagger-ui',
         deepLinking: true,
+        supportedSubmitMethods: [],
         presets: [
           (window as any).SwaggerUIBundle.presets.apis,
           (window as any).SwaggerUIStandalonePreset
