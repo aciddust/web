@@ -49,8 +49,11 @@
 			<Menubar.Item on:click={() => routeToPage('hmac')}>
 				HMAC
 			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('echo')}>
+			<!--<Menubar.Item on:click={() => routeToPage('echo')}>
 				Echo
+			</Menubar.Item>-->
+			<Menubar.Item on:click={() => routeToPage('swagger')}>
+				Swagger UI
 			</Menubar.Item>
       <Menubar.Separator />
       <Menubar.Item on:click={async () => {
