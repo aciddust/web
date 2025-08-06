@@ -82,7 +82,7 @@
           bind:value={name}
           id="name"
           class="col-span-3"
-          placeholder="김햄부기온앤온"
+          placeholder="안녕하세요"
         />
       </div>
       <div class="grid grid-cols-4 items-center gap-4">

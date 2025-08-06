@@ -79,7 +79,7 @@
       <div class="flex w-full flex-col space-y-2">
         <h2 class="text-lg font-bold">Name</h2>
         <Input
-          placeholder="김햄부기온앤온"
+          placeholder="안녕하세요"
           id="name" type="text" class="input" bind:value={$name}
         />
       </div>
