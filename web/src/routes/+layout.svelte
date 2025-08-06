@@ -79,8 +79,8 @@
       <Menubar.Item on:click={() => routeToPage('gallery')}>
 				Gallery
 			</Menubar.Item>
-			<Menubar.Item on:click={() => routeToPage('chill')}>
-				Chill
+			<Menubar.Item on:click={() => routeToPage('cat')}>
+				OIIA OIIA
 			</Menubar.Item>
 			<Menubar.Item on:click={() => routeToPage('asmr')}>
 				ASMR
